@@ -14,7 +14,7 @@ let url = "https://www.wikidata.org/w/api.php?action=wbsearchentities&origin=*&f
 let language = "&language=en"
 let val = userinput
 let result1 = url + val + language
-
+//Promise for calling wikidata api
   const datawiki = async () => {
   console.log(result1)
   const response  = await fetch(result1)
@@ -24,11 +24,13 @@ let result1 = url + val + language
   recoin_val = search[0].id
     return recoin_val
 }
+//Promise for calling recoin api
 const recoin = async url2 =>{
   const request = await fetch(url2)
   const data2 = await request.json()
   return data2
 }
+//Promise for calling wikidatacomplete api
 const recoin2 = async(qid1 , pid1) =>{
 await new Promise(resolve => setTimeout(resolve, 1000));
 var url = "https://qanswer-svc2.univ-st-etienne.fr/ml/kgcompletion";
@@ -49,6 +51,7 @@ var data = '{ "qid": "Q2985668", "pid": "P407"}';
 
 return xhr.send(data);
 }
+//Main Function
 const main = async() =>{
   const ans = await datawiki()
 
