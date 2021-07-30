@@ -213,7 +213,7 @@
                     </div> \
                     <span class="wikibase-toolbar-container wikibase-edittoolbar-container">\
                     <span class="wikibase-toolbar-item wikibase-toolbar wikibase-toolbar-container"><span class="wikibase-toolbar-item wikibase-toolbar wikibase-toolbar-container"><span class="wikibase-toolbarbutton wikibase-toolbar-item wikibase-toolbar-button wikibase-toolbar-button-add"><a class = "f2w-button f2w-property f2w-approve" href="#" title="" text-id = "' + result1[i].text + '" data-id = "'+ result1[i].property +'" url-id = "' + result1[i].object[0].object + '"><span class="wb-icon"></span>approve </a></span></span></span>\
-                    <span class="wikibase-toolbar-item wikibase-toolbar wikibase-toolbar-container"><span class="wikibase-toolbar-item wikibase-toolbar wikibase-toolbar-container"><span class="wikibase-toolbarbutton wikibase-toolbar-item wikibase-toolbar-button wikibase-toolbar-button-remove"><a href="f2w-button f2w-property f2w-reject" href = "#" title=""><span class="wb-icon"></span>reject</a></span></span></span>\
+                    <span class="wikibase-toolbar-item wikibase-toolbar wikibase-toolbar-container"><span class="wikibase-toolbar-item wikibase-toolbar wikibase-toolbar-container"><span class="wikibase-toolbarbutton wikibase-toolbar-item wikibase-toolbar-button wikibase-toolbar-button-remove"><a class="f2w-button f2w-property f2w-reject" href = "#" title=""><span class="wb-icon"></span>reject</a></span></span></span>\
                     </span> \
                     <div class = wikibase-statementview-references-container>\
                         <div class = wikibase-statementview-references-heading>\
@@ -267,8 +267,27 @@
                     console.log(arg1);
                     console.log(arg2);
                     createclaim(entityid, arg1,snak,sourceSnaks,snaksorder);
+                    mw.notify ('You have successfully added the claim',
+					{
+						title: 'WikidataComplete-info',
+						autoHide: true,
+						type: 'info'
+					}
+				);
+			
                     setTimeout(loadentityselector, 100);
-                })    
+                    
+                })
+                $('.f2w-reject').on('click',function(e){
+                    mw.notify ('You have successfully rejected the claim',
+					{
+						title: 'WikidataComplete-info',
+						autoHide: true,
+						type: 'info'
+					}
+				);  
+                });
+
                 $('.wikibase-statementgroupview').last().find('.wikibase-statementlistview-listview').append(statement);
             }
 
