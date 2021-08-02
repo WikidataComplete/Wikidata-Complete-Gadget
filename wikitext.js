@@ -242,7 +242,7 @@
 </div></div><div class="wikibase-addtoolbar wikibase-toolbar-item wikibase-toolbar wikibase-addtoolbar-container wikibase-toolbar-container"><span class="wikibase-toolbarbutton wikibase-toolbar-item wikibase-toolbar-button wikibase-toolbar-button-add"><a href="#" title=""><span class="wb-icon"></span>add reference</a></span></div></div>\
                         </div>\
                     </div>';
-                $('.f2w-approve').on('click',function(e){
+                $('.f2w-approve').unbind('click').on('click',function(e){
                     e.preventDefault();
                     e.stopPropagation();
                     let arg1 = e.target.getAttribute('data-id');
@@ -278,7 +278,7 @@
                     setTimeout(loadentityselector, 100);
                     
                 })
-                $('.f2w-reject').on('click',function(e){
+                $('.f2w-reject').unbind('click').on('click',function(e){
                     mw.notify ('You have successfully rejected the claim',
 					{
 						title: 'WikidataComplete-info',
