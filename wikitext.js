@@ -99,31 +99,10 @@
              <div class="wikibase-showinverse" style="padding:10px;overflow:hidden;"></div> \
              <div class="wikibase-addtoolbar wikibase-toolbar-item wikibase-toolbar wikibase-addtoolbar-container wikibase-toolbar-container"><span class="wikibase-toolbarbutton wikibase-toolbar-item wikibase-toolbar-button wikibase-toolbar-button-add"><a href="'+ newitem +'" title="Find a new item"><span class="wb-icon"></span>New Item</a></span></div>\
         </div>';
-
-        function addqualifier(data){
-            
-                
-                var api = new mw.Api();
-                var token = mw.user.tokens.values.csrfToken;
-                console.log(token);
-                console.log(data.claim.id);
-                
-
-        return   api.post({
-
-            action: 'wbsetqualifier',
-            claim: data.claim.id,
-            value: "hello",
-            snaktype: 'value',
-            token: token,
-            summary: "WIKIDATA_API_COMMENT"
-            })
-            
-        }
-
-        function createclaim(qid, pid,snak,sourceSnaks,snaksorder){
+        function createclaimwithqualifier(qid, pid,snak,sourceSnaks,snaksorder,snaksorder2){
             
             console.log(snak);
+            console.log(snaksorder2);
             console.log(qid);
             console.log(pid);
             
@@ -141,24 +120,39 @@
                         token: token
                         }).then(
                         function(data){
-                            addqualifier(data);
-							console.log(sourceSnaks);
                             var api = new mw.Api();
                             var token = mw.user.tokens.values.csrfToken;
                             console.log(token);
                             console.log(data.claim.id);
-                            console.log(snaksorder);
-
+                            
+                            console.log(snaksorder2);
                     return   api.post({
-
-						action: 'wbsetreference',
-						statement: data.claim.id,
-						snaks: JSON.stringify(sourceSnaks),
-                        snaksorder: JSON.stringify(snaksorder),
+                        
+                        action: 'wbsetqualifier',
+                        claim: data.claim.id,
+                        property:'P1683',
+                        snaktype: 'value',
+                        value:JSON.stringify(snaksorder2),
                         token: token,
-						summary: "WIKIDATA_API_COMMENT"
+                        summary: "WIKIDATA_API_COMMENT"
+                        })
 						})
-						}).then(
+                        .then(function (data3) {
+                            var api = new mw.Api();
+                            var token = mw.user.tokens.values.csrfToken;
+                            console.log(data3.claim.id);
+                            return  api.post({
+
+                                action: 'wbsetreference',
+                                statement: data3.claim.id,
+                                snaks: JSON.stringify(sourceSnaks),
+                                snaksorder: JSON.stringify(snaksorder),
+                                token: token,
+                                summary: "WIKIDATA_API_COMMENT"
+                                })
+                            }
+
+                        ).then(
                                function(data2){
                                        console.log(data2);
                                        if(data2.success == 1)
@@ -168,6 +162,9 @@
                                });       
                         });
             }
+
+
+
     function loaditems() {
         $('span#inverseclaims').text(messages.title);
         $('#inversesection').find('.wikibase-showinverse').html(messages.loading);
@@ -212,7 +209,7 @@
                         </div> \
                     </div> \
                     <span class="wikibase-toolbar-container wikibase-edittoolbar-container">\
-                    <span class="wikibase-toolbar-item wikibase-toolbar wikibase-toolbar-container"><span class="wikibase-toolbar-item wikibase-toolbar wikibase-toolbar-container"><span class="wikibase-toolbarbutton wikibase-toolbar-item wikibase-toolbar-button wikibase-toolbar-button-add"><a class = "f2w-button f2w-property f2w-approve" href="#" title="" text-id = "' + result1[i].text + '" data-id = "'+ result1[i].property +'" url-id = "' + result1[i].object[0].object + '"><span class="wb-icon"></span>approve </a></span></span></span>\
+                    <span class="wikibase-toolbar-item wikibase-toolbar wikibase-toolbar-container"><span class="wikibase-toolbar-item wikibase-toolbar wikibase-toolbar-container"><span class="wikibase-toolbarbutton wikibase-toolbar-item wikibase-toolbar-button wikibase-toolbar-button-add"><a class = "f2w-button f2w-property f2w-approve" href="#" title="" text-id = "' + result1[i].text + '" data-id = "'+ result1[i].property +'" url-id = "' + result1[i].object[0].object + '" " qualifier-id = "' + result1[i].evidence + '" " ref-id = "' + result1[i].wikipediaLink + '"><span class="wb-icon"></span>approve </a></span></span></span>\
                     <span class="wikibase-toolbar-item wikibase-toolbar wikibase-toolbar-container"><span class="wikibase-toolbar-item wikibase-toolbar wikibase-toolbar-container"><span class="wikibase-toolbarbutton wikibase-toolbar-item wikibase-toolbar-button wikibase-toolbar-button-remove"><a class="f2w-button f2w-property f2w-reject" href = "#" title=""><span class="wb-icon"></span>reject</a></span></span></span>\
                     </span> \
                     <div class = wikibase-statementview-references-container>\
@@ -248,25 +245,32 @@
                     let arg1 = e.target.getAttribute('data-id');
                     let arg2 = e.target.getAttribute('text-id');
                     let arg3 = e.target.getAttribute('url-id');
+                    let arg4 = e.target.getAttribute('qualifier-id');
+                    let arg5 = e.target.getAttribute('ref-id');
                     //var url = 'https://www.wikidata.org/wiki/Q1760610';
                     var snak = JSON.stringify({ "entity-type": 'item', "numeric-id": arg3.substring(32) });
-                    var snaksorder = ["P143"];
-                    var sourceSnaks = {"P143": [
-                        {
-                            "snaktype": "value",
-                            "property": "P143", // source of info
-                            "datavalue": {
-                                "value": {
-                                    "entity-type": "item",
-                                    "numeric-id": "52",
+                    var snaksorder = ["P4656"];
+                    var sourceSnaks = {
+                        "P4656": [
+                            {
+                                "snaktype": "value",
+                                "property": "P4656",
+                                "datavalue": {
+                                    "value": arg5,
+                                    "type": "string"
                                 },
-                                "type": "wikibase-entityid"
+                                "datatype": "url"
                             }
-                        }
-                    ]};
+                        ]
+                    };
+                    var snaksorder2 = {
+                        "text": arg4,
+                        "language": "en"
+                    };
+                    console.log(snaksorder2);
                     console.log(arg1);
                     console.log(arg2);
-                    createclaim(entityid, arg1,snak,sourceSnaks,snaksorder);
+                    createclaimwithqualifier(entityid, arg1,snak,sourceSnaks,snaksorder,snaksorder2);
                     mw.notify ('You have successfully added the claim',
 					{
 						title: 'WikidataComplete-info',
@@ -275,7 +279,7 @@
 					}
 				);
 			
-                    setTimeout(loadentityselector, 100);
+                   // setTimeout(loadentityselector, 100);
                     
                 })
                 $('.f2w-reject').unbind('click').on('click',function(e){
