@@ -168,14 +168,16 @@
     function loaditems() {
         $('span#inverseclaims').text(messages.title);
         $('#inversesection').find('.wikibase-showinverse').html(messages.loading);
-        $.getJSON('https://qanswer-svc3.univ-st-etienne.fr/facts/get?qid=Q24034587&format=json',
+        var fetchurl = 'https://qanswer-svc3.univ-st-etienne.fr/facts/get?qid=' + entityid + '&format=json';
+        $.getJSON(fetchurl,
         function( result1 ){
         for (var i=0; i< result1.length; i++){ 
+                    console.log(result1);
                     var prop = result1[i].property;
                     var string = result1[i].text;
                     //console.log(prop);
         	        var statementgroup = '\
-	                        <div id="' + result1[i].property + '" class="wikibase-statementgroupview listview-item" style = "border:5px solid #8F00FF;"> \
+	                        <div id="' + result1[i].id + '" class="wikibase-statementgroupview listview-item" style = "border:5px solid #8F00FF;"> \
 	                            <div class="wikibase-statementgroupview-property"> \
 	                                <div class="wikibase-statementgroupview-property-label" dir="auto"> \
                                     <a href="https://www.wikidata.org/wiki/Property:' + result1[i].property + '">' + result1[i].question + '</a>\
@@ -204,13 +206,16 @@
                                     <div class="wikibase-snakview-value wikibase-snakview-variation-valuesnak"> \
                                         <a href="' + result1[i].object[0].object + '" >' + result1[i].text + '</a>\
                                     </div> \
+                                    <div class = "rejection-icon" style="float: right; position: relative; z-index: 1;">\
+                                    <img class = "reject-icon" src="https://endlessicons.com/wp-content/uploads/2012/12/remove-icon-614x460.png" style="width: 40px; height: 50px; user-select: none;">\
+                                    </div>\
                                 </div> \
                             </div> \
                         </div> \
                     </div> \
                     <span class="wikibase-toolbar-container wikibase-edittoolbar-container">\
                     <span class="wikibase-toolbar-item wikibase-toolbar wikibase-toolbar-container"><span class="wikibase-toolbar-item wikibase-toolbar wikibase-toolbar-container"><span class="wikibase-toolbarbutton wikibase-toolbar-item wikibase-toolbar-button wikibase-toolbar-button-add"><a class = "f2w-button f2w-property f2w-approve" href="#" title="" text-id = "' + result1[i].text + '" data-id = "'+ result1[i].property +'" url-id = "' + result1[i].object[0].object + '" " qualifier-id = "' + result1[i].evidence + '" " ref-id = "' + result1[i].wikipediaLink + '"><span class="wb-icon"></span>approve </a></span></span></span>\
-                    <span class="wikibase-toolbar-item wikibase-toolbar wikibase-toolbar-container"><span class="wikibase-toolbar-item wikibase-toolbar wikibase-toolbar-container"><span class="wikibase-toolbarbutton wikibase-toolbar-item wikibase-toolbar-button wikibase-toolbar-button-remove"><a class="f2w-button f2w-property f2w-reject" href = "#" title=""><span class="wb-icon"></span>reject</a></span></span></span>\
+                    <span class="wikibase-toolbar-item wikibase-toolbar wikibase-toolbar-container"><span class="wikibase-toolbar-item wikibase-toolbar wikibase-toolbar-container"><span class="wikibase-toolbarbutton wikibase-toolbar-item wikibase-toolbar-button wikibase-toolbar-button-remove"><a class="f2w-button f2w-property f2w-reject" href = "#" title="" reject-id = "'+ result1[i].id +'"><span class="wb-icon"></span>reject</a></span></span></span>\
                     </span> \
                     <div class = wikibase-statementview-references-container>\
                         <div class = wikibase-statementview-references-heading>\
@@ -239,8 +244,9 @@
 </div></div><div class="wikibase-addtoolbar wikibase-toolbar-item wikibase-toolbar wikibase-addtoolbar-container wikibase-toolbar-container"><span class="wikibase-toolbarbutton wikibase-toolbar-item wikibase-toolbar-button wikibase-toolbar-button-add"><a href="#" title=""><span class="wb-icon"></span>add reference</a></span></div></div>\
                         </div>\
                     </div>';
+ $('.wikibase-statementgroupview').last().find('.wikibase-statementlistview-listview').append(statement);
                 $('.f2w-approve').unbind('click').on('click',function(e){
-                    e.preventDefault();
+                    //e.preventDefault();
                     e.stopPropagation();
                     let arg1 = e.target.getAttribute('data-id');
                     let arg2 = e.target.getAttribute('text-id');
@@ -283,16 +289,35 @@
                     
                 })
                 $('.f2w-reject').unbind('click').on('click',function(e){
+                    e.preventDefault();
                     mw.notify ('You have successfully rejected the claim',
 					{
 						title: 'WikidataComplete-info',
 						autoHide: true,
 						type: 'info'
 					}
-				);  
-                });
+                    
+				);
 
-                $('.wikibase-statementgroupview').last().find('.wikibase-statementlistview-listview').append(statement);
+                let rej = e.target.getAttribute('reject-id');
+                document.getElementById(rej).innerHTML = ''
+                //$('#inversesection').find('.wikibase-statementgroupview listview-item').attr(rej).remove();
+                let reject_url = 'https://qanswer-svc3.univ-st-etienne.fr/fact/correct?userCookie=c51f3c6f-ef1c-41ff-b1ca-7a994666b93e&factId=3410&correction=2';
+
+                var settings = {
+                    "url": "https://qanswer-svc3.univ-st-etienne.fr/fact/correct?userCookie=c51f3c6f-ef1c-41ff-b1ca-7a994666b93e&factId="+rej+"&correction=2",
+                    "method": "POST",
+                    "timeout": 0,
+                  };
+                  
+                  $.ajax(settings).done(function (response) {
+                    console.log(response);
+                    location.reload();
+                  });
+                });
+                  
+
+               
             }
 
             $('#inversesection').find('.wikibase-showinverse').html('<a href="https://www.wikidata.org/w/index.php?title=Special:WhatLinksHere&target=' + entityid + '&namespace=0">' + messages.more + '</a>');
