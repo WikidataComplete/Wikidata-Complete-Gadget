@@ -99,6 +99,44 @@
              <div class="wikibase-showinverse" style="padding:10px;overflow:hidden;"></div> \
              <div class="wikibase-addtoolbar wikibase-toolbar-item wikibase-toolbar wikibase-addtoolbar-container wikibase-toolbar-container"><span class="wikibase-toolbarbutton wikibase-toolbar-item wikibase-toolbar-button wikibase-toolbar-button-add"><a href="'+ newitem +'" title="Find a new item"><span class="wb-icon"></span>New Item</a></span></div>\
         </div>';
+        function createclaim(qid,pid,snak,sourceSnaks,snaksorder){
+            var api = new mw.Api();
+            api.get( { action: 'query', meta: 'tokens'}).then(
+                function(aw) {
+                    var token = aw.query.tokens.csrftoken;
+                 return  api.post( { 
+                        action: 'wbcreateclaim',
+                        entity: qid,
+                        property: pid,
+                        snaktype: 'value',
+                        value: snak,
+                        summary : "[Edited with Recoin] (Wikidata:Recoin)",
+                        token: token
+                        }).then(function (data3) {
+                            var api = new mw.Api();
+                            var token = mw.user.tokens.values.csrfToken;
+                            console.log(data3.claim.id);
+                            return  api.post({
+
+                                action: 'wbsetreference',
+                                statement: data3.claim.id,
+                                snaks: JSON.stringify(sourceSnaks),
+                                snaksorder: JSON.stringify(snaksorder),
+                                token: token,
+                                summary: "WIKIDATA_API_COMMENT"
+                                })
+                            }
+
+                        ).then(
+                               function(data2){
+                                       console.log(data2);
+                                       if(data2.success == 1)
+                                         location.reload();
+                                    //else
+                                      //  alert("Request failed. Please Check again.");
+                               });       
+                        });
+                    }
         function createclaimwithqualifier(qid, pid,snak,sourceSnaks,snaksorder,snaksorder2){
             
             console.log(snak);
@@ -207,14 +245,14 @@
                                         <a href="' + result1[i].object[0].object + '" >' + result1[i].text + '</a>\
                                     </div> \
                                     <div class = "rejection-icon" style="float: right; position: relative; z-index: 1;">\
-                                    <img class = "reject-icon" src="https://endlessicons.com/wp-content/uploads/2012/12/remove-icon-614x460.png" style="width: 40px; height: 50px; user-select: none;">\
+                                    <img class = "reject-icon" src="https://upload.wikimedia.org/wikipedia/commons/c/cc/Approve_Icon.png" style="width: 40px; height: 50px; user-select: none;">\
                                     </div>\
                                 </div> \
                             </div> \
                         </div> \
                     </div> \
                     <span class="wikibase-toolbar-container wikibase-edittoolbar-container">\
-                    <span class="wikibase-toolbar-item wikibase-toolbar wikibase-toolbar-container"><span class="wikibase-toolbar-item wikibase-toolbar wikibase-toolbar-container"><span class="wikibase-toolbarbutton wikibase-toolbar-item wikibase-toolbar-button wikibase-toolbar-button-add"><a class = "f2w-button f2w-property f2w-approve" href="#" title="" text-id = "' + result1[i].text + '" data-id = "'+ result1[i].property +'" url-id = "' + result1[i].object[0].object + '" " qualifier-id = "' + result1[i].evidence + '" " ref-id = "' + result1[i].wikipediaLink + '"><span class="wb-icon"></span>approve </a></span></span></span>\
+                    <span class="wikibase-toolbar-item wikibase-toolbar wikibase-toolbar-container"><span class="wikibase-toolbar-item wikibase-toolbar wikibase-toolbar-container"><span class="wikibase-toolbarbutton wikibase-toolbar-item wikibase-toolbar-button wikibase-toolbar-button-add"><a class = "f2w-button f2w-property f2w-approve" href="#" title="" text-id = "' + result1[i].text + '" data-id = "'+ result1[i].property +'" url-id = "' + result1[i].object[0].object + '" " qualifier-id = "' + result1[i].evidence + '" " ref-id = "' + result1[i].wikipediaLink + '"><span class="wb-icon"></span><img class = "reject-icon" src="https://upload.wikimedia.org/wikipedia/commons/c/cc/Approve_Icon.png" style="width: 20px; height: 0px; user-select: none;">approve </a></span></span></span>\
                     <span class="wikibase-toolbar-item wikibase-toolbar wikibase-toolbar-container"><span class="wikibase-toolbar-item wikibase-toolbar wikibase-toolbar-container"><span class="wikibase-toolbarbutton wikibase-toolbar-item wikibase-toolbar-button wikibase-toolbar-button-remove"><a class="f2w-button f2w-property f2w-reject" href = "#" title="" reject-id = "'+ result1[i].id +'"><span class="wb-icon"></span>reject</a></span></span></span>\
                     </span> \
                     <div class = wikibase-statementview-references-container>\
@@ -230,18 +268,36 @@
 <div class="wikibase-referenceview-listview"><div class="wikibase-snaklistview">\
 <div class="wikibase-snaklistview-listview"><div class="wikibase-snakview wikibase-snakview-5a343e7e758a4282a01316d3e959b6e653b767fc">\
 <div class="wikibase-snakview-property-container">\
-<div class="wikibase-snakview-property" dir="auto"><a title="Property:P143" href="/wiki/Property:P143">imported from Wikimedia project</a></div>\
+<div class="wikibase-snakview-property" dir="auto"><a title="Property:P4656" href="/wiki/Property:P4656">Wikimedia import URL</a></div>\
 </div>\
 <div class="wikibase-snakview-value-container" dir="auto">\
 <div class="wikibase-snakview-typeselector"></div>\
 <div class="wikibase-snakview-body">\
-<div class="wikibase-snakview-value wikibase-snakview-variation-valuesnak"><a title="Q11920" href="/wiki/Q11920">' + result1[i].wikipediaLink + '</a></div>\
+<div class="wikibase-snakview-value wikibase-snakview-variation-valuesnak"><a title="' + entityid + '" href="' + result1[i].wikipediaLink + '">' + result1[i].wikipediaLink + '</a></div>\
 <div class="wikibase-snakview-indicators"></div>\
 </div>\
 </div>\
 </div></div>\
 </div></div>\
-</div></div><div class="wikibase-addtoolbar wikibase-toolbar-item wikibase-toolbar wikibase-addtoolbar-container wikibase-toolbar-container"><span class="wikibase-toolbarbutton wikibase-toolbar-item wikibase-toolbar-button wikibase-toolbar-button-add"><a href="#" title=""><span class="wb-icon"></span>add reference</a></span></div></div>\
+</div></div>\
+<div class="wikibase-referenceview wikibase-referenceview-d4bd87b862b12d99d26e86472d44f26858dee639">\
+<div class="wikibase-referenceview-heading"></div>\
+<div class="wikibase-referenceview-listview"><div class="wikibase-snaklistview">\
+<div class="wikibase-snaklistview-listview"><div class="wikibase-snakview wikibase-snakview-f30cbd35620c4ea6d0633aaf0210a8916130469b">\
+<div class="wikibase-snakview-property-container">\
+<div class="wikibase-snakview-property" dir="auto"><a title="Property:P143" href="/wiki/Property:P143">evidence</a></div>\
+</div>\
+<div class="wikibase-snakview-value-container" dir="auto">\
+<div class="wikibase-snakview-typeselector"></div>\
+<div class="wikibase-snakview-body">\
+<div class="wikibase-snakview-value wikibase-snakview-variation-valuesnak"><a title="Q8447" href="/wiki/Q8447">'+result1[i].evidence+'</a></div>\
+<div class="wikibase-snakview-indicators"></div>\
+</div>\
+</div>\
+</div></div>\
+</div></div>\
+</div>\
+<div class="wikibase-addtoolbar wikibase-toolbar-item wikibase-toolbar wikibase-addtoolbar-container wikibase-toolbar-container"><span class="wikibase-toolbarbutton wikibase-toolbar-item wikibase-toolbar-button wikibase-toolbar-button-add"><a href="#" title=""><span class="wb-icon"></span>add reference</a></span></div></div>\
                         </div>\
                     </div>';
  $('.wikibase-statementgroupview').last().find('.wikibase-statementlistview-listview').append(statement);
@@ -255,7 +311,7 @@
                     let arg5 = e.target.getAttribute('ref-id');
                     //var url = 'https://www.wikidata.org/wiki/Q1760610';
                     var snak = JSON.stringify({ "entity-type": 'item', "numeric-id": arg3.substring(32) });
-                    var snaksorder = ["P4656"];
+                    var snaksorder = ["P4656","P1683"];
                     var sourceSnaks = {
                         "P4656": [
                             {
@@ -267,6 +323,20 @@
                                 },
                                 "datatype": "url"
                             }
+                        ],
+                        "P1683": [
+                            {
+                                "snaktype": "value",
+                                "property": "P1683",
+                                "datavalue": {
+                                    "value": {
+                                        "text": arg4,
+                                        "language": "en"
+                                    },
+                                    "type": "monolingualtext"
+                                },
+                                "datatype": "monolingualtext"
+                            }
                         ]
                     };
                     var snaksorder2 = {
@@ -276,7 +346,8 @@
                     console.log(snaksorder2);
                     console.log(arg1);
                     console.log(arg2);
-                    createclaimwithqualifier(entityid, arg1,snak,sourceSnaks,snaksorder,snaksorder2);
+                    //createclaimwithqualifier(entityid, arg1,snak,sourceSnaks,snaksorder,snaksorder2);
+                    createclaim(entityid, arg1,snak,sourceSnaks,snaksorder);
                     mw.notify ('You have successfully added the claim',
 					{
 						title: 'WikidataComplete-info',
