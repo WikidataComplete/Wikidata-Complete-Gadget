@@ -1,7 +1,7 @@
 /********************************************************************************************************
 * Google Summer of Code 2021 Project for Wikimedia Foundation                                           *
 * Project Name : WikidataComplete                                                                       *
-* Mentors: Dennis Diefenbatch,Andreas Both,Aleksandr Pervalov,Kunpeng Guo                               *
+* Mentors: Dennis Diefenbatch,Andreas Both,Aleksandr Perevalov,Kunpeng Guo                               *
 * Participant: Dhairya Khanna                                                                           *                        *                                                           
 *                                                                                                       *
 ********************************************************************************************************/
