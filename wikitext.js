@@ -1,7 +1,7 @@
 /********************************************************************************************************
 * Google Summer of Code 2021 Project for Wikimedia Foundation                                           *
 * Project Name : WikidataComplete                                                                       *
-* Mentors: Dennis Diefenbatch,Andreas Both,Aleksandr Perevalov,Kunpeng Guo                               *
+* Mentors: Dennis Diefenbatch,Andreas Both,Aleksandr Pervalov,Kunpeng Guo                               *
 * Participant: Dhairya Khanna                                                                           *                        *                                                           
 *                                                                                                       *
 ********************************************************************************************************/
@@ -15,7 +15,7 @@
 
     var lang = mw.config.get('wgUserLanguage');
     var messages, entityid = mw.config.get('wbEntityId'), api = new mw.Api();
-
+    var username = mw.config.get('wgUserName');
     messages = (function () {
         var translations = {
             de: {
@@ -28,7 +28,7 @@
             },
             en: {
                 'title1': 'You have these number of statements to approve',
-                'title2': 'No statements to approve',
+                'title2': 'Show next entity which can be  approved',
                 'more': 'more',
                 'inverse': 'inverse',
                 'show-inverse': 'show fetched statements',
@@ -83,18 +83,7 @@
         facts_length = data.length;
         }
     });
-    //Function for generating message for the available facts 
-    function start_menu(facts_length){
-    var final_message = '';
-        if(facts_length>0){
-            final_message = (messages.title1 + ':  ' + String(facts_length));
-    }
-    else{
-        final_message = (messages.title2);
-    }
-    return final_message;
-    }
-	//Generating a new random item to approve
+   //Generating a new random item to approve
 	var newitem = {};
     $.ajax({
         url: "https://qanswer-svc3.univ-st-etienne.fr/fact/get?id=EMPTY&category=EMPTY&property=EMPTY",
@@ -104,19 +93,31 @@
             newitem = data.wikidataLink;
         }
     });
+     //Function for generating message for the available facts 
+     function start_menu(facts_length){
+        var final_message = '';
+            if(facts_length>0){
+                final_message = (messages.title1 + ':  ' + String(facts_length));
+        }
+        else{
+            final_message = (messages.title2.link(newitem));
+        }
+        return final_message;
+        }
+        
     //Html for showcasing the facts
     var html = '\
         <h2 class="wb-section-heading section-heading wikibase-statements" dir="auto"><span id="inverseclaims" class="mw-headline"></span></h2>\
         <div class="wikibase-statementgrouplistview" id="inversesection" > \
              <div class="wikibase-listview"></div> \
              <div class="wikibase-showinverse" style="padding:10px;overflow:hidden;"></div> \
-             <div class="wikibase-addtoolbar wikibase-toolbar-item wikibase-toolbar wikibase-addtoolbar-container wikibase-toolbar-container"><span class="wikibase-toolbarbutton wikibase-toolbar-item wikibase-toolbar-button wikibase-toolbar-button-add"><a href="'+ newitem +'" title="Find a new item"><span class="wb-icon"></span>New Item</a></span></div>\
+             <h3 class="Next Approvable Item"><span class="Next Item"><a href="'+ newitem +'" title="Find a new item">Next Approvable Item</a></span></h3> \
         </div>';
         /*
         The following function is used to create claim using Wikidata APIs. 
         Want know about them? Check out the documentation: https://www.wikidata.org/w/api.php 
         */
-        function createclaim(qid,pid,snak,sourceSnaks,snaksorder){
+        function createclaim(qid,pid,snak,sourceSnaks,snaksorder,username){
             var api = new mw.Api();
             api.get( { action: 'query', meta: 'tokens'}).then(
                 function(aw) {
@@ -127,9 +128,10 @@
                         property: pid,
                         snaktype: 'value',
                         value: snak,
-                        summary : "[Edited with Recoin] (Wikidata:Recoin)",
+                        summary : "Edited with Wikidatacomplete",
                         token: token
                         }).then(function (data) {
+                            var comment = `Statement Suggested by Wikidatacomplete and approved by the user: ${username}`;
                             var api = new mw.Api();
                             var token = mw.user.tokens.values.csrfToken;
                             return  api.post({
@@ -139,7 +141,7 @@
                                 snaks: JSON.stringify(sourceSnaks),
                                 snaksorder: JSON.stringify(snaksorder),
                                 token: token,
-                                summary: "WIKIDATA_API_COMMENT"
+                                summary: comment
                                 })
                             }
 
@@ -229,14 +231,14 @@
 <div class="wikibase-snakview-value-container" dir="auto">\
 <div class="wikibase-snakview-typeselector"></div>\
 <div class="wikibase-snakview-body">\
-<div class="wikibase-snakview-value wikibase-snakview-variation-valuesnak"><a title="Q8447" href="/wiki/Q8447">'+result1[i].evidence+'</a></div>\
+<div class="wikibase-snakview-value wikibase-snakview-variation-valuesnak">'+result1[i].evidence+'</div>\
 <div class="wikibase-snakview-indicators"></div>\
 </div>\
 </div>\
 </div></div>\
 </div></div>\
 </div>\
-<div class="wikibase-addtoolbar wikibase-toolbar-item wikibase-toolbar wikibase-addtoolbar-container wikibase-toolbar-container"><span class="wikibase-toolbarbutton wikibase-toolbar-item wikibase-toolbar-button wikibase-toolbar-button-add"><a href="#" title=""><span class="wb-icon"></span>add reference</a></span></div></div>\
+</div>\
                         </div>\
                     </div>\
                     </div>';
@@ -280,7 +282,7 @@
                         ]
                     };
                     
-                    createclaim(entityid, arg1,snak,sourceSnaks,snaksorder);
+                    createclaim(entityid, arg1,snak,sourceSnaks,snaksorder,username);
                     mw.notify ('You have successfully added the claim',
 					{
 						title: 'WikidataComplete-info',
@@ -288,6 +290,16 @@
 						type: 'info'
 					}
 				);
+                var acceptance = {
+                    "url": "https://qanswer-svc3.univ-st-etienne.fr/fact/correct?userCookie=c51f3c6f-ef1c-41ff-b1ca-7a994666b93e&factId="+rej+"&correction=1",
+                    "method": "POST",
+                    "timeout": 0,
+                  };
+                  
+                  $.ajax(acceptance).done(function (response) {
+                    console.log(response);
+                    
+                  });
                     
                 })
                 $('.f2w-reject').unbind('click').on('click',function(e){
@@ -302,13 +314,14 @@
 				);
 
                 let rej = e.target.getAttribute('reject-id');
-                var settings = {
+                //POST request for removing the rejected claim.
+                var rejections = {
                     "url": "https://qanswer-svc3.univ-st-etienne.fr/fact/correct?userCookie=c51f3c6f-ef1c-41ff-b1ca-7a994666b93e&factId="+rej+"&correction=2",
                     "method": "POST",
                     "timeout": 0,
                   };
                   
-                  $.ajax(settings).done(function (response) {
+                  $.ajax(rejections).done(function (response) {
                     console.log(response);
                     location.reload();
                   });
@@ -325,10 +338,11 @@
             $( '<a>' )
             .attr( 'href', '#' )
             .attr( 'style', 'border:2px solid #8F00FF;padding:10px 80px;' )
-            .text(start_menu(facts_length))
+            .html(start_menu(facts_length))
             .click( function ( event ) {
-                event.preventDefault();
+                //event.preventDefault();
                 loaditems();
+                $(this).off(event);
             })
         );
     }
@@ -336,4 +350,3 @@
     $(init);
 
 }(mediaWiki, jQuery, wikibase));
-
