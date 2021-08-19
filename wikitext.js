@@ -97,21 +97,22 @@
      function start_menu(facts_length){
         var final_message = '';
             if(facts_length>0){
-                final_message = (messages.title1 + ':  ' + String(facts_length));
+                final_message = ('There are '+ String(facts_length)+ ' statements to approve.');
         }
         else{
-            final_message = (messages.title2.link(newitem));
+            final_message = ("Go to entity with statements to approve".link(newitem));
         }
         return final_message;
         }
         
-    //Html for showcasing the facts
     var html = '\
+        <div class="wikidatacomplete">\
         <h2 class="wb-section-heading section-heading wikibase-statements" dir="auto"><span id="inverseclaims" class="mw-headline"></span></h2>\
         <div class="wikibase-statementgrouplistview" id="inversesection" > \
              <div class="wikibase-listview"></div> \
-             <div class="wikibase-showinverse" style="padding:10px;overflow:hidden;"></div> \
+             <div class="wikibase-showinverse" style="padding:10px;overflow:hidden;border: 3px solid #c8ccd1;margin: 20px 0;text-align: center;"></div> \
              <h3 class="Next Approvable Item"><span class="Next Item"><a href="'+ newitem +'" title="Find a new item">Next Approvable Item</a></span></h3> \
+        </div>\
         </div>';
         /*
         The following function is used to create claim using Wikidata APIs. 
@@ -149,7 +150,7 @@
                                function(data2){
                                        console.log(data2);
                                        if(data2.success == 1)
-                                         location.reload();
+                                         console.log("Claim Added Successfully");
                                });       
                         });
                     }
@@ -162,7 +163,7 @@
         function( result1 ){
         for (var i=0; i< result1.length; i++){ 
         	        var statementgroup = '\
-	                        <div id= "'+result1[i].id+ '" class="wikibase-statementgroupview listview-item" style = "border:5px solid #8F00FF;"> \
+	                        <div id= "'+result1[i].id+ '" class="wikibase-statementgroupview listview-item" style = "border:3px solid #c8ccd1;margin:20px 0;"> \
 	                            <div class="wikibase-statementgroupview-property"> \
 	                                <div class="wikibase-statementgroupview-property-label" dir="auto"> \
                                     <a href="https://www.wikidata.org/wiki/Property:' + result1[i].property + '">' + result1[i].question + '</a>\
@@ -174,7 +175,7 @@
 	                            </div> \
                  <div class="wikibase-statementview wb-normal listview-item wikibase-toolbar-item"> \
 					<div class="wikibase-statementview-rankselector"><div class="wikibase-rankselector ui-state-disabled"> \
-						<span class="ui-icon ui-icon-rankselector wikibase-rankselector-' + 'Normal Rank' + '"></span> \
+                    <span class="ui-icon ui-icon-rankselector wikibase-rankselector-normal" title="Normal rank"></span> \
 					</div></div>  \
                     <div class="wikibase-statementview-mainsnak-container"> \
                         <div class="wikibase-statementview-mainsnak" dir="auto"> \
@@ -185,7 +186,7 @@
                                 </div> \
                                 <div class="wikibase-snakview-value-container" dir="auto"> \
                                     <div class="wikibase-snakview-value wikibase-snakview-variation-valuesnak"> \
-                                        <a href="' + result1[i].object[0].object + '" >' + result1[i].text + '</a>\
+                                        <a href="' + result1[i].object[0].object + '" ><b>' + result1[i].text + '</b></a>\
                                     </div> \
                                     </div>\
                                 </div> \
@@ -193,8 +194,8 @@
                         </div> \
                     </div> \
                     <span class="wikibase-toolbar-container wikibase-edittoolbar-container">\
-                    <span class="wikibase-toolbar-item wikibase-toolbar wikibase-toolbar-container"><span class="wikibase-toolbar-item wikibase-toolbar wikibase-toolbar-container"><span class="wikibase-toolbarbutton wikibase-toolbar-item wikibase-toolbar-button wikibase-toolbar-button-save"><a class = "f2w-button f2w-property f2w-approve" href="#" title="" text-id = "' + result1[i].text + '" data-id = "'+ result1[i].property +'" url-id = "' + result1[i].object[0].object + '" " qualifier-id = "' + result1[i].evidence + '" " ref-id = "' + result1[i].wikipediaLink + '"><span class="wb-icon"></span>publish    </a></span></span></span>\
-                    <span class="wikibase-toolbar-item wikibase-toolbar wikibase-toolbar-container"><span class="wikibase-toolbar-item wikibase-toolbar wikibase-toolbar-container"><span class="wikibase-toolbarbutton wikibase-toolbar-item wikibase-toolbar-button wikibase-toolbar-button-cancel"><a class="f2w-button f2w-property f2w-reject" href = "#" title="" reject-id = "'+ result1[i].id +'"><span class="wb-icon"></span>reject</a></span></span></span>\
+                    <span class="wikibase-toolbar-item wikibase-toolbar wikibase-toolbar-container"><span class="wikibase-toolbar-item wikibase-toolbar wikibase-toolbar-container"><span class="wikibase-toolbarbutton wikibase-toolbar-item wikibase-toolbar-button wikibase-toolbar-button-save"><a class = "f2w-button f2w-property f2w-approve" href="#" title="" text-id = "' + result1[i].text + '" data-id = "'+ result1[i].property +'" url-id = "' + result1[i].object[0].object + '" " qualifier-id = "' + result1[i].evidence + '" " ref-id = "' + result1[i].wikipediaLink + '"accept-id = "'+ result1[i].id +'"style="padding-right: 30px;" ><span class="wb-icon" style = "display:inline-block;vertical-align:middle;background-position:center"></span>publish</a></span></span></span>\
+                    <span class="wikibase-toolbar-item wikibase-toolbar wikibase-toolbar-container"><span class="wikibase-toolbar-item wikibase-toolbar wikibase-toolbar-container"><span class="wikibase-toolbarbutton wikibase-toolbar-item wikibase-toolbar-button wikibase-toolbar-button-cancel"><a class="f2w-button f2w-property f2w-reject" href = "#" title="" reject-id = "'+ result1[i].id +'"style="padding-right: 20px;"><span class="wb-icon"></span>reject</a></span></span></span>\
                     </span> \
                     <div class = wikibase-statementview-references-container>\
                         <div class = wikibase-statementview-references-heading>\
@@ -281,8 +282,18 @@
                             }
                         ]
                     };
-                    
                     createclaim(entityid, arg1,snak,sourceSnaks,snaksorder,username);
+                    let acc = e.target.getAttribute('accept-id');
+                    var acceptance = {
+                        "url": "https://qanswer-svc3.univ-st-etienne.fr/fact/correct?userCookie=c51f3c6f-ef1c-41ff-b1ca-7a994666b93e&factId="+acc+"&correction=1",
+                        "method": "POST",
+                        "timeout": 0,
+                      };
+                      
+                      $.ajax(acceptance).done(function (response) {
+                        console.log(response);
+                        location.reload();
+                      });
                     mw.notify ('You have successfully added the claim',
 					{
 						title: 'WikidataComplete-info',
@@ -290,16 +301,7 @@
 						type: 'info'
 					}
 				);
-                var acceptance = {
-                    "url": "https://qanswer-svc3.univ-st-etienne.fr/fact/correct?userCookie=c51f3c6f-ef1c-41ff-b1ca-7a994666b93e&factId="+rej+"&correction=1",
-                    "method": "POST",
-                    "timeout": 0,
-                  };
-                  
-                  $.ajax(acceptance).done(function (response) {
-                    console.log(response);
-                    
-                  });
+                
                     
                 })
                 $('.f2w-reject').unbind('click').on('click',function(e){
@@ -333,11 +335,10 @@
         });
     }
     function init() {
-        $('.wikibase-entitytermsview-heading').append(html);
+        $('div.wikibase-statementgrouplistview').prepend(html);
         $('#inversesection').find('.wikibase-showinverse').append(
             $( '<a>' )
             .attr( 'href', '#' )
-            .attr( 'style', 'border:2px solid #8F00FF;padding:10px 80px;' )
             .html(start_menu(facts_length))
             .click( function ( event ) {
                 //event.preventDefault();
