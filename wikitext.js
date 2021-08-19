@@ -119,6 +119,9 @@
             if(facts_length>0){
                 final_message = ('There are '+ String(facts_length)+ ' statements to approve.');
         }
+        if(facts_length==1){
+            final_message = ('There is '+ String(facts_length)+ ' statement to approve.');
+    }
         else{
             final_message = ("Go to entity with statements to approve".link(newitem));
         }
