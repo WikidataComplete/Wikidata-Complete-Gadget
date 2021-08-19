@@ -121,24 +121,27 @@
      //Function for generating message for the available facts 
      function start_menu(facts_length){
         var final_message = '';
-            if(facts_length>0){
-                final_message = ('There are '+ String(facts_length)+ ' statements to approve.');
-        }
+        console.log(facts_length);
         if(facts_length==1){
             final_message = ('There is '+ String(facts_length)+ ' statement to approve.');
-    }
-        else{
-            final_message = ("Go to entity with statements to approve".link(newitem));
-        }
-        return final_message;
+        }    
+        else if(facts_length>1){
+                final_message = ('There are '+ String(facts_length)+ ' statements to approve.');
         }
         
+        else if(facts_length==0){
+             final_message = ("Go to entity with statements to approve".link(newitem));
+         }
+        console.log(final_message); 
+        return final_message;
+        }
+       
     var html = '\
         <div class="wikidatacomplete">\
         <h2 class="wb-section-heading section-heading wikibase-statements" dir="auto"><span id="inverseclaims" class="mw-headline"></span></h2>\
         <div class="wikibase-statementgrouplistview" id="inversesection" > \
-             <div class="wikibase-listview"></div> \
-             <div class="wikibase-showinverse" style="padding:10px;overflow:hidden;border: 3px solid #c8ccd1;margin: 20px 0;text-align: center;"></div> \
+             <div class="wikibase-listview-3"></div> \
+             <div class="wikibase-showinverse-2" style="padding:10px;overflow:hidden;border: 3px solid #c8ccd1;margin: 20px 0;text-align: center;"></div> \
              <h3 class="Next Approvable Item"><span class="Next Item"><a href="'+ newitem +'" title="Find a new item">Next Approvable Item</a></span></h3> \
         </div>\
         </div>';
@@ -366,7 +369,7 @@
     }
     function init() {
         $('div.wikibase-statementgrouplistview').prepend(html);
-        $('#inversesection').find('.wikibase-showinverse').append(
+        $('#inversesection').find('.wikibase-showinverse-2').append(
             $( '<a>' )
             .attr( 'href', '#' )
             .html(start_menu(facts_length))
