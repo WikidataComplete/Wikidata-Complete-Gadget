@@ -83,6 +83,26 @@
         facts_length = data.length;
         }
     });
+    var highlightlink = [];
+    $.ajax({
+        url: 'https://qanswer-svc3.univ-st-etienne.fr/facts/get?qid=' + entityid + '&format=json',
+        async: false,
+        dataType: 'json',
+        success: function (data) {
+            console.log(data);
+            for(var i=0; i<data.length; i++) {
+        var url = data[i].wikipediaLink;
+        var ans = data[i].text;
+        var evidence = data[i].evidence;
+        var index = data[i].startIdx;
+        var res = evidence.slice(0, index);
+        console.log(res);
+    
+    highlightlink[i] = url + '#:~:text='+res + '-,' + ans;
+            }
+        }
+    });
+    //console.log(highlightlink);
    //Generating a new random item to approve
 	var newitem = {};
     $.ajax({
@@ -156,7 +176,9 @@
                     }
     /*
     The main function for loading the data to the gadget.
-    */    
+    */
+   //https://en.wikipedia.org/wiki/Batgirl_and_the_Birds_of_Prey#:~:text=Batgirl%20and%20the%20Birds%20of%20Prey%20was%20a%20monthly%20ongoing%20American-,comic%20book
+   
     function loaditems() {
         var fetchurl = 'https://qanswer-svc3.univ-st-etienne.fr/facts/get?qid=' + entityid + '&format=json';
         $.getJSON(fetchurl,
@@ -215,7 +237,7 @@
 <div class="wikibase-snakview-value-container" dir="auto">\
 <div class="wikibase-snakview-typeselector"></div>\
 <div class="wikibase-snakview-body">\
-<div class="wikibase-snakview-value wikibase-snakview-variation-valuesnak"><a title="' + entityid + '" href="' + result1[i].wikipediaLink + '">' + result1[i].wikipediaLink + '</a></div>\
+<div class="wikibase-snakview-value wikibase-snakview-variation-valuesnak"><a title="' + entityid + '" href="' + highlightlink[i] + '">' + result1[i].wikipediaLink + '</a></div>\
 <div class="wikibase-snakview-indicators"></div>\
 </div>\
 </div>\
