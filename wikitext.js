@@ -84,6 +84,7 @@
         }
     });
     var highlightlink = [];
+    var boldtext = [];
     $.ajax({
         url: 'https://qanswer-svc3.univ-st-etienne.fr/facts/get?qid=' + entityid + '&format=json',
         async: false,
@@ -94,12 +95,16 @@
         var url = data[i].wikipediaLink;
         var ans = data[i].text;
         var evidence = data[i].evidence;
-        var index = data[i].startIdx;
-        var res = evidence.slice(0, index);
+        var startindex = data[i].startIdx;
+        var endindex = data[i].endIdx;
+        var res = evidence.slice(0, startindex);
         console.log(res);
     
     highlightlink[i] = url + '#:~:text='+res + '-,' + ans;
-            }
+
+    boldtext[i] = evidence.substring(0, startindex) +'<b>'+ evidence.substring(startindex,endindex) +'</b>' + evidence.substring(endindex);
+    console.log(boldtext[i]);
+}
         }
     });
     //console.log(highlightlink);
@@ -211,7 +216,7 @@
                                 </div> \
                                 <div class="wikibase-snakview-value-container" dir="auto"> \
                                     <div class="wikibase-snakview-value wikibase-snakview-variation-valuesnak"> \
-                                        <a href="' + result1[i].object[0].object + '" ><b>' + result1[i].text + '</b></a>\
+                                        <a href="' + result1[i].object[0].object + '" >' + result1[i].text + '</a>\
                                     </div> \
                                     </div>\
                                 </div> \
@@ -257,7 +262,7 @@
 <div class="wikibase-snakview-value-container" dir="auto">\
 <div class="wikibase-snakview-typeselector"></div>\
 <div class="wikibase-snakview-body">\
-<div class="wikibase-snakview-value wikibase-snakview-variation-valuesnak">'+result1[i].evidence+'</div>\
+<div class="wikibase-snakview-value wikibase-snakview-variation-valuesnak">'+boldtext[i]+'</div>\
 <div class="wikibase-snakview-indicators"></div>\
 </div>\
 </div>\
