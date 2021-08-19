@@ -140,8 +140,8 @@
         <div class="wikidatacomplete">\
         <h2 class="wb-section-heading section-heading wikibase-statements" dir="auto"><span id="inverseclaims" class="mw-headline"></span></h2>\
         <div class="wikibase-statementgrouplistview" id="inversesection" > \
-             <div class="wikibase-listview-3"></div> \
-             <div class="wikibase-showinverse-2" style="padding:10px;overflow:hidden;border: 3px solid #c8ccd1;margin: 20px 0;text-align: center;"></div> \
+             <div class="wikibase-listview"></div> \
+             <div class="wikibase-showinverse" style="padding:10px;overflow:hidden;border: 3px solid #c8ccd1;margin: 20px 0;text-align: center;"></div> \
              <h3 class="Next Approvable Item"><span class="Next Item"><a href="'+ newitem +'" title="Find a new item">Next Approvable Item</a></span></h3> \
         </div>\
         </div>';
@@ -149,7 +149,7 @@
         The following function is used to create claim using Wikidata APIs. 
         Want know about them? Check out the documentation: https://www.wikidata.org/w/api.php 
         */
-        function createclaim(qid,pid,snak,sourceSnaks,snaksorder,username){
+        function createclaim(qid,pid,snak,sourceSnaks,snaksorder,username,acc){
             var api = new mw.Api();
             api.get( { action: 'query', meta: 'tokens'}).then(
                 function(aw) {
@@ -181,7 +181,19 @@
                                function(data2){
                                        console.log(data2);
                                        if(data2.success == 1)
-                                         console.log("Claim Added Successfully");
+                                        { console.log("Claim Added Successfully");
+                                        var acceptance = {
+                                            "url": "https://qanswer-svc3.univ-st-etienne.fr/fact/correct?userCookie=c51f3c6f-ef1c-41ff-b1ca-7a994666b93e&factId="+acc+"&correction=1",
+                                            "method": "POST",
+                                            "timeout": 0,
+                                          };
+                                          
+                                          $.ajax(acceptance).done(function (response) {
+                                            console.log(response);
+                                            location.reload();
+                                          });
+                                         location.reload();
+                               }
                                });       
                         });
                     }
@@ -315,18 +327,11 @@
                             }
                         ]
                     };
-                    createclaim(entityid, arg1,snak,sourceSnaks,snaksorder,username);
                     let acc = e.target.getAttribute('accept-id');
-                    var acceptance = {
-                        "url": "https://qanswer-svc3.univ-st-etienne.fr/fact/correct?userCookie=c51f3c6f-ef1c-41ff-b1ca-7a994666b93e&factId="+acc+"&correction=1",
-                        "method": "POST",
-                        "timeout": 0,
-                      };
-                      
-                      $.ajax(acceptance).done(function (response) {
-                        console.log(response);
-                        location.reload();
-                      });
+                    createclaim(entityid, arg1,snak,sourceSnaks,snaksorder,username,acc);
+                    
+                    
+                    
                     mw.notify ('You have successfully added the claim',
 					{
 						title: 'WikidataComplete-info',
@@ -369,7 +374,7 @@
     }
     function init() {
         $('div.wikibase-statementgrouplistview').prepend(html);
-        $('#inversesection').find('.wikibase-showinverse-2').append(
+        $('#inversesection').find('.wikibase-showinverse').append(
             $( '<a>' )
             .attr( 'href', '#' )
             .html(start_menu(facts_length))
