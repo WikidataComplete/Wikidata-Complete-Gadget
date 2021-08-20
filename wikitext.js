@@ -1,7 +1,7 @@
 /********************************************************************************************************
 * Google Summer of Code 2021 Project for Wikimedia Foundation                                           *
 * Project Name : WikidataComplete                                                                       *
-* Mentors: Dennis Diefenbatch,Andreas Both,Aleksandr Pervalov,Kunpeng Guo                               *
+* Mentors: Dennis Diefenbach, Andreas Both, Aleksandr Perevalov, Kunpeng Guo                               *
 * Participant: Dhairya Khanna                                                                           *                        *                                                           
 *                                                                                                       *
 ********************************************************************************************************/
@@ -142,7 +142,7 @@
         <div class="wikibase-statementgrouplistview" id="inversesection" > \
              <div class="wikibase-listview"></div> \
              <div class="wikibase-showinverse" style="padding:10px;overflow:hidden;border: 3px solid #c8ccd1;margin: 20px 0;text-align: center;"></div> \
-             <h3 class="Next Approvable Item"><span class="Next Item"><a href="'+ newitem +'" title="Find a new item">Next Approvable Item</a></span></h3> \
+             <h3 class="NextApprovableItem"><span class="NextItem"><a href="'+ newitem +'" title="Find a new item">Next Approvable Item</a></span></h3> \
         </div>\
         </div>';
         /*
@@ -288,7 +288,7 @@
                         </div>\
                     </div>\
                     </div>';
-                    //To append the statements to the html.
+                    //To append the statements to the HTML code
                     $('#inversesection').find('.wikibase-listview').parent().append(statementgroup);    
                 $('.f2w-approve').unbind('click').on('click',function(e){
                     //e.preventDefault();
