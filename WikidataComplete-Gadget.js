@@ -407,6 +407,17 @@
                 $(this).off(event);
             })
         );
+        setTimeout(function(){
+            if($("#inversesection > div.wikibase-addtoolbar.wikibase-toolbar-item.wikibase-toolbar.wikibase-addtoolbar-container.wikibase-toolbar-container")=== null) //To remove auto-generated add statements button
+            {
+                console.log("Not Found");
+            }
+            else{
+    
+                $("#inversesection > div.wikibase-addtoolbar.wikibase-toolbar-item.wikibase-toolbar.wikibase-addtoolbar-container.wikibase-toolbar-container").remove();
+    
+            }    },1000);
+         
     }
 
     $(init);
