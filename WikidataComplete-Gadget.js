@@ -252,12 +252,12 @@
             console.log(result1);
                     var statementgroup = '\
 	                        <div id= "'+result1[i].id+ '" class="wikibase-statementgroupview listview-item" style = "border:3px solid #c8ccd1;margin:20px 0;"> \
-	                            <div class="wikibase-statementgroupview-property"> \
+	                            <div class="wikibase-statementgroupview-property" style="border: revert;"> \
 	                                <div class="wikibase-statementgroupview-property-label" dir="auto"> \
                                     <a href="https://www.wikidata.org/wiki/Property:' + result1[i].property + '">' + result1[i].question + '</a>\
 	                                </div> \
 	                            </div> \
-	                            <div class="wikibase-statementlistview"> \
+	                            <div class="wikibase-statementlistview" style="border:revert;"> \
 	                                <div class="wikibase-statementlistview-listview"> \
 	                                </div> \
 	                            </div> \
