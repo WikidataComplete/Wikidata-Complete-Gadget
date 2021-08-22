@@ -377,6 +377,10 @@
 				);
 
                 let rej = e.target.getAttribute('reject-id');
+                var rej_string = String(rej);
+                var new_rej_string = '#\\3' + rej_string.substring(0,1) + ' ' + rej_string.substring(1);
+                console.log(new_rej_string);
+                document.querySelector(new_rej_string).remove();
                 //POST request for removing the rejected claim.
                 var rejections = {
                     "url": "https://qanswer-svc3.univ-st-etienne.fr/fact/correct?userCookie=c51f3c6f-ef1c-41ff-b1ca-7a994666b93e&factId="+rej+"&correction=2",
@@ -386,7 +390,7 @@
                   
                   $.ajax(rejections).done(function (response) {
                     console.log(response);
-                    location.reload();
+                    //location.reload();
                   });
                 });
                 
