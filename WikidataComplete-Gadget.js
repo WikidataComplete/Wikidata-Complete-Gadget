@@ -1,7 +1,7 @@
 /********************************************************************************************************
 * Google Summer of Code 2021 Project for Wikimedia Foundation                                           *
 * Project Name : WikidataComplete                                                                       *
-* Mentors: Dennis Diefenbach, Andreas Both, Aleksandr Perevalov, Kunpeng Guo                               *
+* Mentors: Dennis Diefenbach,Andreas Both, Aleksandr Perevalov,Kunpeng Guo                              *
 * Participant: Dhairya Khanna                                                                           *                        *                                                           
 *                                                                                                       *
 ********************************************************************************************************/
@@ -94,11 +94,13 @@
             for(var i=0; i<data.length; i++) {
         var url = data[i].wikipediaLink;
         var ans = data[i].text;
+       // <a target="_blank" rel="noreferrer" href={`${url}#:~:text=${encodeURIComponent(evidence.slice(0, offset_start))}-,${answer.answer}`}> => For chrome highlight, make the code fit your needs.
         var evidence = data[i].evidence;
         var startindex = data[i].startIdx;
         var endindex = data[i].endIdx;
-        var res = evidence.slice(0, startindex);
+        var res = encodeURIComponent(evidence.slice(0, startindex));
         console.log(res);
+        
     
     highlightlink[i] = url + '#:~:text='+res + '-,' + ans;
 
@@ -118,6 +120,14 @@
             newitem = data.wikidataLink;
         }
     });
+    
+    function start_menu_null(facts_length){
+        var newitemtoappend;
+        if(facts_length == 0)newitemtoappend='';
+        else newitemtoappend = "Next Approvable Item";
+    return newitemtoappend;
+    }
+    var newitemtoappend = start_menu_null(facts_length);
      //Function for generating message for the available facts 
      function start_menu(facts_length){
         var final_message = '';
@@ -137,18 +147,30 @@
         }
        
     var html = '\
+        <div class="wb-section-heading section-heading wikibase-statements wikibase-statements">\
         <div class="wikidatacomplete">\
-        <h2 class="wb-section-heading section-heading wikibase-statements" dir="auto"><span id="inverseclaims" class="mw-headline"></span></h2>\
         <div class="wikibase-statementgrouplistview" id="inversesection" > \
              <div class="wikibase-listview"></div> \
-             <div class="wikibase-showinverse" style="padding:10px;overflow:hidden;border: 3px solid #c8ccd1;margin: 20px 0;text-align: center;"></div> \
-             <h3 class="NextApprovableItem"><span class="NextItem"><a href="'+ newitem +'" title="Find a new item">Next Approvable Item</a></span></h3> \
+             <div class="wikibase-showinverse" style="padding:10px;overflow:hidden;border: 3px solid #c8ccd1;margin: 20px 0;text-align: center;">\
+             <div class="wikibase-showinverse-parent" style="float:left;padding-left: 308px;">\
+             <div class="wikibase-showinverse-child-1"></div>\
+           </div>\
+           <div class="wikibase-showinverse-parent" style= "float: right;padding-right: 20px;">\
+             <div class="wikibase-showinverse-child-2">\
+             <a href="'+ newitem +'" title="Find a new item">'+newitemtoappend+'</a>\
+             </div>\
+           </div>\
+             </div> \
+        </div>\
         </div>\
         </div>';
         /*
         The following function is used to create claim using Wikidata APIs. 
         Want know about them? Check out the documentation: https://www.wikidata.org/w/api.php 
         */
+        $(document).ready(function() {
+             $('#inversesection:last').remove();
+        });
         function createclaim(qid,pid,snak,sourceSnaks,snaksorder,username,acc){
             var api = new mw.Api();
             api.get( { action: 'query', meta: 'tokens'}).then(
@@ -201,13 +223,34 @@
     The main function for loading the data to the gadget.
     */
    //https://en.wikipedia.org/wiki/Batgirl_and_the_Birds_of_Prey#:~:text=Batgirl%20and%20the%20Birds%20of%20Prey%20was%20a%20monthly%20ongoing%20American-,comic%20book
-   
+   var check = new Map();
+   function Properties(){
+        $(document).ready(function(){
+            var propertyList = $(".wikibase-statementgroupview-property-label a").map(function (){
+                return $(this).attr("href").split("/wiki/Property:")[1]
+            });
+            console.log(propertyList);
+            // this gives you the list of existing property ids
+            for(var i = 0;i<propertyList.length;i++){
+           check.set(propertyList, 1);
+            }
+            // check the property id proposed by Wikidatacomplte api and you can control the show-no-show case.
+        })
+    }
+    Properties();
+    let keys = Array.from(check);
+    for(let key in keys){
+        console.log(key);
+    }
+    console.log(check);
     function loaditems() {
         var fetchurl = 'https://qanswer-svc3.univ-st-etienne.fr/facts/get?qid=' + entityid + '&format=json';
         $.getJSON(fetchurl,
         function( result1 ){
-        for (var i=0; i< result1.length; i++){ 
-        	        var statementgroup = '\
+        for (var i=0; i< result1.length; i++){
+            
+            console.log(result1);
+                    var statementgroup = '\
 	                        <div id= "'+result1[i].id+ '" class="wikibase-statementgroupview listview-item" style = "border:3px solid #c8ccd1;margin:20px 0;"> \
 	                            <div class="wikibase-statementgroupview-property"> \
 	                                <div class="wikibase-statementgroupview-property-label" dir="auto"> \
@@ -239,8 +282,8 @@
                         </div> \
                     </div> \
                     <span class="wikibase-toolbar-container wikibase-edittoolbar-container">\
-                    <span class="wikibase-toolbar-item wikibase-toolbar wikibase-toolbar-container"><span class="wikibase-toolbar-item wikibase-toolbar wikibase-toolbar-container"><span class="wikibase-toolbarbutton wikibase-toolbar-item wikibase-toolbar-button wikibase-toolbar-button-save"><a class = "f2w-button f2w-property f2w-approve" href="#" title="" text-id = "' + result1[i].text + '" data-id = "'+ result1[i].property +'" url-id = "' + result1[i].object[0].object + '" " qualifier-id = "' + result1[i].evidence + '" " ref-id = "' + result1[i].wikipediaLink + '"accept-id = "'+ result1[i].id +'"style="padding-right: 30px;" ><span class="wb-icon" style = "display:inline-block;vertical-align:middle;background-position:center"></span>publish</a></span></span></span>\
-                    <span class="wikibase-toolbar-item wikibase-toolbar wikibase-toolbar-container"><span class="wikibase-toolbar-item wikibase-toolbar wikibase-toolbar-container"><span class="wikibase-toolbarbutton wikibase-toolbar-item wikibase-toolbar-button wikibase-toolbar-button-cancel"><a class="f2w-button f2w-property f2w-reject" href = "#" title="" reject-id = "'+ result1[i].id +'"style="padding-right: 20px;"><span class="wb-icon"></span>reject</a></span></span></span>\
+                    <span class="wikibase-toolbar-item wikibase-toolbar wikibase-toolbar-container"><span class="wikibase-toolbar-item wikibase-toolbar wikibase-toolbar-container"><span class="wikibase-toolbarbutton wikibase-toolbar-item wikibase-toolbar-button wikibase-toolbar-button-save"><a class = "f2w-button f2w-property f2w-approve" href="'+'#'+ result1[i].property +'" title="" text-id = "' + result1[i].text + '" data-id = "'+ result1[i].property +'" url-id = "' + result1[i].object[0].object + '" " qualifier-id = "' + result1[i].evidence + '" " ref-id = "' + result1[i].wikipediaLink + '"accept-id = "'+ result1[i].id +'"style="padding-right: 30px;" ><span class="wb-icon" style = "display:inline-block;vertical-align:middle;background-position:center"></span>publish</a></span></span></span>\
+                    <span class="wikibase-toolbar-item wikibase-toolbar wikibase-toolbar-container"><span class="wikibase-toolbar-item wikibase-toolbar wikibase-toolbar-container"><span class="wikibase-toolbarbutton wikibase-toolbar-item wikibase-toolbar-button wikibase-toolbar-button-cancel"><a class="f2w-button f2w-property f2w-reject" href = "#" title="" reject-id = "'+ result1[i].id +'"style="padding-right: 20px;"><span class="wb-icon" style="padding-top: 22px;"></span>reject</a></span></span></span>\
                     </span> \
                     <div class = wikibase-statementview-references-container>\
                         <div class = wikibase-statementview-references-heading>\
@@ -260,7 +303,7 @@
 <div class="wikibase-snakview-value-container" dir="auto">\
 <div class="wikibase-snakview-typeselector"></div>\
 <div class="wikibase-snakview-body">\
-<div class="wikibase-snakview-value wikibase-snakview-variation-valuesnak"><a title="' + entityid + '" href="' + highlightlink[i] + '">' + result1[i].wikipediaLink + '</a></div>\
+<div class="wikibase-snakview-value wikibase-snakview-variation-valuesnak"><a title="' + entityid + '" href="' + highlightlink[i] + '"target = "_blank" rel="noreferrer">' + result1[i].wikipediaLink + '</a></div>\
 <div class="wikibase-snakview-indicators"></div>\
 </div>\
 </div>\
@@ -288,7 +331,7 @@
                         </div>\
                     </div>\
                     </div>';
-                    //To append the statements to the HTML code
+                    //To append the statements to the HTML code.
                     $('#inversesection').find('.wikibase-listview').parent().append(statementgroup);    
                 $('.f2w-approve').unbind('click').on('click',function(e){
                     //e.preventDefault();
@@ -373,14 +416,14 @@
         });
     }
     function init() {
-        $('div.wikibase-statementgrouplistview').prepend(html);
-        $('#inversesection').find('.wikibase-showinverse').append(
+        $('div.wikibase-statementgrouplistview').first().prepend(html);
+        $('#inversesection').find('.wikibase-showinverse-child-1').append(
             $( '<a>' )
             .attr( 'href', '#' )
             .html(start_menu(facts_length))
             .click( function ( event ) {
                 //event.preventDefault();
-                loaditems();
+                loaditems(check);
                 $(this).off(event);
             })
         );
