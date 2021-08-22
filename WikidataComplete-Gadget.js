@@ -6,7 +6,7 @@
 * Participant: Dhairya Khanna                                                                           *                                                           
 *                                                                                                       *
 ********************************************************************************************************/
-
+importScript('User:Gabinguo/celebration.js');
 (function(mw, $, wb) {
     "use strict";
 
@@ -316,6 +316,7 @@
                 $('.f2w-approve').unbind('click').on('click',function(e){
                     //e.preventDefault();
                     e.stopPropagation();
+                    celebrate();
                     let arg1 = e.target.getAttribute('data-id');    
                     let arg2 = e.target.getAttribute('text-id');    
                     let arg3 = e.target.getAttribute('url-id');
