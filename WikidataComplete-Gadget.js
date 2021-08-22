@@ -1,8 +1,9 @@
 /********************************************************************************************************
 * Google Summer of Code 2021 Project for Wikimedia Foundation                                           *
 * Project Name : WikidataComplete                                                                       *
+* Project Documentation : https://www.wikidata.org/wiki/Wikidata:WikidataComplete                       *
 * Mentors: Dennis Diefenbach,Andreas Both, Aleksandr Perevalov,Kunpeng Guo                              *
-* Participant: Dhairya Khanna                                                                           *                        *                                                           
+* Participant: Dhairya Khanna                                                                           *                                                           
 *                                                                                                       *
 ********************************************************************************************************/
 
@@ -223,32 +224,11 @@
     The main function for loading the data to the gadget.
     */
    //https://en.wikipedia.org/wiki/Batgirl_and_the_Birds_of_Prey#:~:text=Batgirl%20and%20the%20Birds%20of%20Prey%20was%20a%20monthly%20ongoing%20American-,comic%20book
-   var check = new Map();
-   function Properties(){
-        $(document).ready(function(){
-            var propertyList = $(".wikibase-statementgroupview-property-label a").map(function (){
-                return $(this).attr("href").split("/wiki/Property:")[1]
-            });
-            console.log(propertyList);
-            // this gives you the list of existing property ids
-            for(var i = 0;i<propertyList.length;i++){
-           check.set(propertyList, 1);
-            }
-            // check the property id proposed by Wikidatacomplte api and you can control the show-no-show case.
-        })
-    }
-    Properties();
-    let keys = Array.from(check);
-    for(let key in keys){
-        console.log(key);
-    }
-    console.log(check);
-    function loaditems() {
+       function loaditems() {
         var fetchurl = 'https://qanswer-svc3.univ-st-etienne.fr/facts/get?qid=' + entityid + '&format=json';
         $.getJSON(fetchurl,
         function( result1 ){
-        for (var i=0; i< result1.length; i++){
-            
+        for (var i=0; i< result1.length; i++){ 
             console.log(result1);
                     var statementgroup = '\
 	                        <div id= "'+result1[i].id+ '" class="wikibase-statementgroupview listview-item" style = "border:3px solid #c8ccd1;margin:20px 0;"> \
@@ -423,7 +403,7 @@
             .html(start_menu(facts_length))
             .click( function ( event ) {
                 //event.preventDefault();
-                loaditems(check);
+                loaditems();
                 $(this).off(event);
             })
         );
