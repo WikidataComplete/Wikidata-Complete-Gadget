@@ -29,11 +29,11 @@ All this couldn't be done without the support and guidance from my mentors :hear
 ## Contributions to the Project:
 | Commit | Description |
 | --- | ---------|
-|[](https://github.com/Dhairya3124/Wikidata-Complete-Gadget/commit/c4519a64836cc4d18d34ae39b2848d337d6d5ca0)| Adding Claim with both the references |
-|[](https://github.com/Dhairya3124/Wikidata-Complete-Gadget/issues/9)|Adding Animations for Approval|
-|[](https://github.com/Dhairya3124/Wikidata-Complete-Gadget/issues/28)|Removing bug for automatic add statement|
-|[](https://github.com/Dhairya3124/Wikidata-Complete-Gadget/issues/10)|Adding Rejection API and removing facts|
-|[](https://github.com/Dhairya3124/Wikidata-Complete-Gadget/issues/14)|Integrating Chrome highlight feature with highlighting the fact |
+|[Adding claim](https://github.com/Dhairya3124/Wikidata-Complete-Gadget/commit/c4519a64836cc4d18d34ae39b2848d337d6d5ca0)| Adding Claim with both the references |
+|[#9](https://github.com/Dhairya3124/Wikidata-Complete-Gadget/issues/9)|Adding Animations for Approval|
+|[#28](https://github.com/Dhairya3124/Wikidata-Complete-Gadget/issues/28)|Removing bug for automatic add statement|
+|[#10](https://github.com/Dhairya3124/Wikidata-Complete-Gadget/issues/10)|Adding Rejection API and removing facts|
+|[#14](https://github.com/Dhairya3124/Wikidata-Complete-Gadget/issues/14)|Integrating Chrome highlight feature with highlighting the fact |
 
 All my updates for the program are [here](https://www.mediawiki.org/wiki/Google_Summer_of_Code/2021/Bi-weekly_Reports).
 
