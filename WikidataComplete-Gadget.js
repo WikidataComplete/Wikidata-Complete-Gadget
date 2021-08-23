@@ -354,7 +354,7 @@ importScript('User:Gabinguo/celebration.js');
                 $('.f2w-approve').unbind('click').on('click',function(e){
                     //e.preventDefault();
                     e.stopPropagation();
-                    celebrate();
+                    //celebrate();
                     let arg1 = e.target.getAttribute('data-id');    
                     let arg2 = e.target.getAttribute('text-id');    
                     let arg3 = e.target.getAttribute('url-id');
@@ -399,7 +399,8 @@ importScript('User:Gabinguo/celebration.js');
 						title: 'WikidataComplete-info',
 						autoHide: true,
 						type: 'info'
-					}
+                        
+					}.then(celebrate())
 				);
                 
                     
