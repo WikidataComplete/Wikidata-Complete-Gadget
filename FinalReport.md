@@ -42,6 +42,9 @@ All my updates for the program are [here](https://www.mediawiki.org/wiki/Google_
 The project UI is created to make Wikidata Editors to be comfortable this gadget comfortable with the Wikidata Users.
 ![](https://github.com/Dhairya3124/Wikidata-Complete-Gadget/blob/main/img/image.png)
 
+## Video Tutorial for Gadget:
+[![IMAGE ALT TEXT HERE](https://i.ytimg.com/vi/Ju2ExZ_khxQ/hqdefault.jpg?sqp=-oaymwEcCPYBEIoBSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLB1tz56V-JYxFxuFRBK7CIiGlIG9g)](https://www.youtube.com/watch?v=Ju2ExZ_khxQ)
+
 ## What's Next? 
 I'll be contributing this project and improve it's performance and UI . It needs more feature such as editing of the 
 evidence, less reloads while embedding to the Wikidata.
