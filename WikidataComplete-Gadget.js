@@ -75,15 +75,31 @@ importScript('User:Gabinguo/celebration.js');
         return ret;
     }());
     //The length of the facts generated from the dataset.
-    var facts_length = {};
+    var facts_length  = {};
+    var newfacts;
     $.ajax({
         url: 'https://qanswer-svc3.univ-st-etienne.fr/facts/get?qid=' + entityid + '&format=json',
         async: false,
         dataType: 'json',
         success: function (data) {
-        facts_length = data.length;
+        facts_length  = data.length;
+        newfacts = data;
         }
     });
+    console.log(newfacts);
+    var propertyList2 = []
+        $(".wikibase-statementgroupview-property-label a").each(function (){
+            propertyList2.push($(this).prop("href").split("/wiki/Property:")[1].toString())
+        });
+        
+        // the list to display
+        var filteredFacts = newfacts.filter(newfact => !propertyList2.includes(newfact.property))
+        var filteredFactslen = filteredFacts["length"];
+        console.log("Test: ");
+        console.log(filteredFacts);
+        //filteredFactslen = to_string(filteredFacts);
+        
+
     var highlightlink = [];
     var boldtext = [];
     $.ajax({
@@ -122,25 +138,25 @@ importScript('User:Gabinguo/celebration.js');
         }
     });
     
-    function start_menu_null(facts_length){
+    function start_menu_null(filteredFactslen ){
         var newitemtoappend;
-        if(facts_length == 0)newitemtoappend='';
+        if(filteredFactslen  == 0)newitemtoappend='';
         else newitemtoappend = "Next Approvable Item";
     return newitemtoappend;
     }
-    var newitemtoappend = start_menu_null(facts_length);
+    var newitemtoappend = start_menu_null(filteredFactslen );
      //Function for generating message for the available facts 
-     function start_menu(facts_length){
+     function start_menu(filteredFactslen ){
         var final_message = '';
-        console.log(facts_length);
-        if(facts_length==1){
-            final_message = ('There is '+ String(facts_length)+ ' statement to approve.');
+        console.log(filteredFactslen );
+        if(filteredFactslen ==1){
+            final_message = ('There is '+ String(filteredFactslen )+ ' statement to approve.');
         }    
-        else if(facts_length>1){
-                final_message = ('There are '+ String(facts_length)+ ' statements to approve.');
+        else if(filteredFactslen >1){
+                final_message = ('There are '+ String(filteredFactslen )+ ' statements to approve.');
         }
         
-        else if(facts_length==0){
+        else if(filteredFactslen ==0){
              final_message = ("Go to entity with statements to approve".link(newitem));
          }
         console.log(final_message); 
@@ -224,12 +240,34 @@ importScript('User:Gabinguo/celebration.js');
     The main function for loading the data to the gadget.
     */
    //https://en.wikipedia.org/wiki/Batgirl_and_the_Birds_of_Prey#:~:text=Batgirl%20and%20the%20Birds%20of%20Prey%20was%20a%20monthly%20ongoing%20American-,comic%20book
-       function loaditems() {
+   var check = new Map();
+   var newList = [];
+   function Properties(){
+        $(document).ready(function(){
+            var propertyList = []
+        $(".wikibase-statementgroupview-property-label a").each(function (){
+            propertyList.push($(this).prop("href").split("/wiki/Property:")[1].toString())
+        });
+        
+            console.log(propertyList);
+            // this gives you the list of existing property ids
+            for(var i = 0;i<propertyList.length;i++){
+            newList[i] = propertyList[i];
+            }
+            // check the property id proposed by Wikidatacomplte api and you can control the show-no-show case.
+        })
+    }
+    Properties();
+    console.log(newList[0]);
+    
+   function loaditems() {
         var fetchurl = 'https://qanswer-svc3.univ-st-etienne.fr/facts/get?qid=' + entityid + '&format=json';
         $.getJSON(fetchurl,
         function( result1 ){
         for (var i=0; i< result1.length; i++){ 
             console.log(result1);
+            
+            if(!newList.includes(String(result1[i].property))){
                     var statementgroup = '\
 	                        <div id= "'+result1[i].id+ '" class="wikibase-statementgroupview listview-item" style = "border:3px solid #c8ccd1;margin:20px 0;"> \
 	                            <div class="wikibase-statementgroupview-property" style="border: revert;"> \
@@ -254,7 +292,7 @@ importScript('User:Gabinguo/celebration.js');
                                 </div> \
                                 <div class="wikibase-snakview-value-container" dir="auto"> \
                                     <div class="wikibase-snakview-value wikibase-snakview-variation-valuesnak"> \
-                                        <a href="' + result1[i].object[0].object + '" >' + result1[i].text + '</a>\
+                                        <a href="' + result1[i].object[0].object + '" >' + result1[i].object[0].objectLabel + '</a>\
                                     </div> \
                                     </div>\
                                 </div> \
@@ -397,15 +435,17 @@ importScript('User:Gabinguo/celebration.js');
                 
 
                
-            }
+            }}
         });
+    
     }
+       
     function init() {
         $('div.wikibase-statementgrouplistview').first().prepend(html);
         $('#inversesection').find('.wikibase-showinverse-child-1').append(
             $( '<a>' )
             .attr( 'href', '#' )
-            .html(start_menu(facts_length))
+            .html(start_menu(filteredFactslen ))
             .click( function ( event ) {
                 //event.preventDefault();
                 loaditems();
