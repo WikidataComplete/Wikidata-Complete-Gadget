@@ -36,15 +36,15 @@ All this couldn't be done without the support and guidance from my mentors :hear
 |[](https://github.com/Dhairya3124/Wikidata-Complete-Gadget/issues/14)|Integrating Chrome highlight feature with highlighting the fact |
 
 All my updates for the program are [here](https://www.mediawiki.org/wiki/Google_Summer_of_Code/2021/Bi-weekly_Reports).
-## What's Next? 
-I'll be contributing this project and improve it's performance and UI . It needs more feature such as editing of the 
-evidence, less reloads while embedding to the Wikidata.
 
 
 ## Outcomes:
 The project UI is created to make Wikidata Editors to be comfortable this gadget comfortable with the Wikidata Users.
 ![](https://github.com/Dhairya3124/Wikidata-Complete-Gadget/blob/main/img/image.png)
 
+## What's Next? 
+I'll be contributing this project and improve it's performance and UI . It needs more feature such as editing of the 
+evidence, less reloads while embedding to the Wikidata.
 ## Final Note:
 I would like to thank Google and WikiMedia Foundation for such a great program experience.
 
