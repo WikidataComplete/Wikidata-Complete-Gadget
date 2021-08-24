@@ -164,7 +164,7 @@ importScript('User:Gabinguo/celebration.js');
         <div class="wikidatacomplete">\
         <div class="wikibase-statementgrouplistview" id="inversesection" > \
              <div class="wikibase-listview"></div> \
-             <div class="wikibase-showinverse" style="padding:10px;overflow:hidden;border: 3px solid #c8ccd1;margin: 20px 0;text-align: center;">\
+             <div class="wikibase-showinverse" style="padding:10px;overflow:hidden;border: 3px solid #0645ad;margin: 20px 0;text-align: center;">\
              <div class="wikibase-showinverse-parent" style="float:left;padding-left: 308px;">\
              <div class="wikibase-showinverse-child-1"></div>\
            </div>\
@@ -443,6 +443,7 @@ importScript('User:Gabinguo/celebration.js');
             .attr( 'href', '#' )
             .html(start_menu(filteredFactslen ))
             .click( function ( event ) {
+                $('#inversesection > div.wikibase-showinverse').css({'border': '3px solid #0645ad'})
                 loaditems();
                 $(this).off(event);
             })
