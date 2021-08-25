@@ -16,7 +16,7 @@ This project was the part of [Google Summer of Code Program 2021 (GSoC'21)]().
 ### Step 3: Now add the following line of code to your [common.js](https://www.wikidata.org/wiki/Special:MyPage/common.js):
 
 ```bash
-importScript('User:Dhairya3124/WikidataComplete.js');
+importScript('User:Data-Complete-Gadget/WikidataComplete.js');
 ```
 
 ### Step 4: Now visit any [random item](https://www.wikidata.org/wiki/Special:Random) at Wikidata and start editing 🥳
