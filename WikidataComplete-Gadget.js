@@ -97,7 +97,7 @@ importScript('User:Gabinguo/celebration.js');
         var filteredFactslen = filteredFacts["length"];
         console.log("Test: ");
         console.log(filteredFacts);
-       
+        //filteredFactslen = to_string(filteredFacts);
         
 
     var highlightlink = [];
@@ -107,22 +107,26 @@ importScript('User:Gabinguo/celebration.js');
         async: false,
         dataType: 'json',
         success: function (data) {
+            console.log(data);
             for(var i=0; i<data.length; i++) {
         var url = data[i].wikipediaLink;
-        var ans = data[i].text;var evidence = data[i].evidence;
+        var ans = data[i].text;
+       // <a target="_blank" rel="noreferrer" href={`${url}#:~:text=${encodeURIComponent(evidence.slice(0, offset_start))}-,${answer.answer}`}> => For chrome highlight, make the code fit your needs.
+        var evidence = data[i].evidence;
         var startindex = data[i].startIdx;
         var endindex = data[i].endIdx;
         var res = encodeURIComponent(evidence.slice(0, startindex));
-              
+        console.log(res);
+        
     
     highlightlink[i] = url + '#:~:text='+res + '-,' + ans;
 
     boldtext[i] = evidence.substring(0, startindex) +'<b>'+ evidence.substring(startindex,endindex) +'</b>' + evidence.substring(endindex);
-    
+    console.log(boldtext[i]);
 }
         }
     });
-    
+    //console.log(highlightlink);
    //Generating a new random item to approve
 	var newitem = {};
     $.ajax({
@@ -164,7 +168,7 @@ importScript('User:Gabinguo/celebration.js');
         <div class="wikidatacomplete">\
         <div class="wikibase-statementgrouplistview" id="inversesection" > \
              <div class="wikibase-listview"></div> \
-             <div class="wikibase-showinverse" style="padding:10px;overflow:hidden;border: 3px solid #0645ad;margin: 20px 0;text-align: center;">\
+             <div class="wikibase-showinverse" style="padding:10px;overflow:hidden;border: 3px solid #c8ccd1;margin: 20px 0;text-align: center;">\
              <div class="wikibase-showinverse-parent" style="float:left;padding-left: 308px;">\
              <div class="wikibase-showinverse-child-1"></div>\
            </div>\
@@ -235,6 +239,7 @@ importScript('User:Gabinguo/celebration.js');
     /*
     The main function for loading the data to the gadget.
     */
+   //https://en.wikipedia.org/wiki/Batgirl_and_the_Birds_of_Prey#:~:text=Batgirl%20and%20the%20Birds%20of%20Prey%20was%20a%20monthly%20ongoing%20American-,comic%20book
    var check = new Map();
    var newList = [];
    function Properties(){
@@ -253,7 +258,7 @@ importScript('User:Gabinguo/celebration.js');
         })
     }
     Properties();
-   
+    console.log(newList[0]);
     
    function loaditems() {
         var fetchurl = 'https://qanswer-svc3.univ-st-etienne.fr/facts/get?qid=' + entityid + '&format=json';
@@ -264,7 +269,7 @@ importScript('User:Gabinguo/celebration.js');
             
             if(!newList.includes(String(result1[i].property))){
                     var statementgroup = '\
-	                        <div id= "'+result1[i].id+ '" class="wikibase-statementgroupview listview-item" style = "border:3px solid #c8ccd1;margin:20px 0;"> \
+	                        <div id= "'+result1[i].id+ '" class="wikibase-statementgroupview listview-item" style = "border:3px solid #0645ad !important;margin:20px 0;"> \
 	                            <div class="wikibase-statementgroupview-property" style="border: revert;"> \
 	                                <div class="wikibase-statementgroupview-property-label" dir="auto"> \
                                     <a href="https://www.wikidata.org/wiki/Property:' + result1[i].property + '">' + result1[i].question + '</a>\
@@ -443,6 +448,7 @@ importScript('User:Gabinguo/celebration.js');
             .attr( 'href', '#' )
             .html(start_menu(filteredFactslen ))
             .click( function ( event ) {
+                event.preventDefault();
                 $('#inversesection > div.wikibase-showinverse').css({'border': '3px solid #0645ad'})
                 loaditems();
                 $(this).off(event);
