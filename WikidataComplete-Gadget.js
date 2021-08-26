@@ -146,6 +146,7 @@ importScript('User:Gabinguo/celebration.js');
     }
     var newitemtoappend = start_menu_null(filteredFactslen );
      //Function for generating message for the available facts 
+    var flag = 0;
      function start_menu(filteredFactslen ){
         var final_message = '';
         console.log(filteredFactslen );
@@ -157,6 +158,7 @@ importScript('User:Gabinguo/celebration.js');
         }
         
         else if(filteredFactslen ==0){
+            flag = 1;
              final_message = ("Go to entity with statements to approve".link(newitem));
          }
         console.log(final_message); 
@@ -170,10 +172,9 @@ importScript('User:Gabinguo/celebration.js');
              <div class="wikibase-listview"></div> \
              <div class="wikibase-showinverse" style="padding:10px;overflow:hidden;border: 3px solid #c8ccd1;margin: 20px 0;text-align: center;">\
              <div class="wikibase-showinverse-parent" style="float:left;padding-left: 308px;">\
-             <div class="wikibase-showinverse-child-1"></div>\
-           </div>\
+             <div class="wikibase-showinverse-child-1" style="float: left;padding-left: 13px;">\</div>\
            <div class="wikibase-showinverse-parent" style= "float: right;padding-right: 20px;">\
-             <div class="wikibase-showinverse-child-2">\
+           <div class="wikibase-showinverse-child-2" style="float: right;padding-left: 207px;">  \
              <a href="'+ newitem +'" title="Find a new item">'+newitemtoappend+'</a>\
              </div>\
            </div>\
@@ -448,8 +449,14 @@ importScript('User:Gabinguo/celebration.js');
             .attr( 'href', '#' )
             .html(start_menu(filteredFactslen ))
             .click( function ( event ) {
-                event.preventDefault();
+                
+                console.log(flag);
+                
+                
+                if(flag == 0){
+                    event.preventDefault();
                 $('#inversesection > div.wikibase-showinverse').css({'border': '3px solid #0645ad'})
+                }
                 loaditems();
                 $(this).off(event);
             })
