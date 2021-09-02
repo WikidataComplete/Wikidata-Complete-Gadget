@@ -174,7 +174,7 @@ importScript('User:Gabinguo/celebration.js');
              <div class="wikibase-showinverse-parent" style="float:left;padding-left: 308px;">\
              <div class="wikibase-showinverse-child-1" style="float: left;padding-left: 13px;">\</div>\
            <div class="wikibase-showinverse-parent" style= "float: right;padding-right: 20px;">\
-           <div class="wikibase-showinverse-child-2" style="float: right;padding-left: 207px;">  \
+           <div class="wikibase-showinverse-child-2" style="position: absolute;float: right;padding-left: 207px;">  \
              <a href="'+ newitem +'" title="Find a new item">'+newitemtoappend+'</a>\
              </div>\
            </div>\
