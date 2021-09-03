@@ -86,7 +86,7 @@ importScript('User:Gabinguo/celebration.js');
         newfacts = data;
         }
     });
-    console.log(newfacts);
+
     var propertyList2 = []
         $(".wikibase-statementgroupview-property-label a").each(function (){
             propertyList2.push($(this).prop("href").split("/wiki/Property:")[1].toString())
@@ -95,9 +95,7 @@ importScript('User:Gabinguo/celebration.js');
         // the list to display
         var filteredFacts = newfacts.filter(newfact => !propertyList2.includes(newfact.property))
         var filteredFactslen = filteredFacts["length"];
-        console.log("Test: ");
-        console.log(filteredFacts);
-        //filteredFactslen = to_string(filteredFacts);
+        
         
 
     var highlightlink = [];
@@ -107,7 +105,7 @@ importScript('User:Gabinguo/celebration.js');
         async: false,
         dataType: 'json',
         success: function (data) {
-            console.log(data);
+            
             for(var i=0; i<data.length; i++) {
         var url = data[i].wikipediaLink;
         var ans = data[i].text;
@@ -116,17 +114,17 @@ importScript('User:Gabinguo/celebration.js');
         var startindex = data[i].startIdx;
         var endindex = data[i].endIdx;
         var res = encodeURIComponent(evidence.slice(0, startindex));
-        console.log(res);
+        
         
     
     highlightlink[i] = url + '#:~:text='+res + '-,' + ans;
 
     boldtext[i] = evidence.substring(0, startindex) +'<b>'+ evidence.substring(startindex,endindex) +'</b>' + evidence.substring(endindex);
-    console.log(boldtext[i]);
+    
 }
         }
     });
-    //console.log(highlightlink);
+    
    //Generating a new random item to approve
 	var newitem = {};
     $.ajax({
@@ -149,7 +147,6 @@ importScript('User:Gabinguo/celebration.js');
     var flag = 0;
      function start_menu(filteredFactslen ){
         var final_message = '';
-        console.log(filteredFactslen );
         if(filteredFactslen ==1){
             final_message = ('There is '+ String(filteredFactslen )+ ' statement to approve.');
         }    
@@ -161,7 +158,6 @@ importScript('User:Gabinguo/celebration.js');
             flag = 1;
              final_message = ("Go to entity with statements to approve".link(newitem));
          }
-        console.log(final_message); 
         return final_message;
         }
        
@@ -219,7 +215,6 @@ importScript('User:Gabinguo/celebration.js');
 
                         ).then(
                                function(data2){
-                                       console.log(data2);
                                        if(data2.success == 1)
                                         { console.log("Claim Added Successfully");
                                         var acceptance = {
@@ -250,7 +245,6 @@ importScript('User:Gabinguo/celebration.js');
             propertyList.push($(this).prop("href").split("/wiki/Property:")[1].toString())
         });
         
-            console.log(propertyList);
             // this gives you the list of existing property ids
             for(var i = 0;i<propertyList.length;i++){
             newList[i] = propertyList[i];
@@ -259,14 +253,14 @@ importScript('User:Gabinguo/celebration.js');
         })
     }
     Properties();
-    console.log(newList[0]);
+    
     
    function loaditems() {
         var fetchurl = 'https://qanswer-svc3.univ-st-etienne.fr/facts/get?qid=' + entityid + '&format=json';
         $.getJSON(fetchurl,
         function( result1 ){
         for (var i=0; i< result1.length; i++){ 
-            console.log(result1);
+            
             
             if(!newList.includes(String(result1[i].property))){
                     var statementgroup = '\
@@ -408,6 +402,19 @@ importScript('User:Gabinguo/celebration.js');
                 })
                 $('.f2w-reject').unbind('click').on('click',function(e){
                     e.preventDefault();
+                    var answer_after_reject;
+                    if((filteredFactslen-1)==1){
+                        answer_after_reject = `There is ${filteredFactslen-1} statement to approve`;   
+                    document.querySelector("#inversesection > div.wikibase-showinverse > div > div.wikibase-showinverse-child-1 > a").innerHTML = answer_after_reject;
+                    }
+                    if((filteredFactslen-1)>1){
+                        answer_after_reject = `There are ${filteredFactslen-1} to approve`;   
+                     document.querySelector("#inversesection > div.wikibase-showinverse > div > div.wikibase-showinverse-child-1 > a").innerHTML = answer_after_reject;
+                    }
+                    else{
+                        document.querySelector("#inversesection > div.wikibase-showinverse > div > div.wikibase-showinverse-parent > div > a").innerHTML = '';
+                    document.querySelector("#inversesection > div.wikibase-showinverse > div > div.wikibase-showinverse-child-1 > a").innerHTML = "Go to entity with statements to approve".link(newitem);
+                    }
                     mw.notify ('You have successfully rejected the claim',
 					{
 						title: 'WikidataComplete-info',
@@ -420,7 +427,6 @@ importScript('User:Gabinguo/celebration.js');
                 let rej = e.target.getAttribute('reject-id');
                 var rej_string = String(rej);
                 var new_rej_string = '#\\3' + rej_string.substring(0,1) + ' ' + rej_string.substring(1);
-                console.log(new_rej_string);
                 document.querySelector(new_rej_string).remove();
                 //POST request for removing the rejected claim.
                 var rejections = {
@@ -449,10 +455,6 @@ importScript('User:Gabinguo/celebration.js');
             .attr( 'href', '#' )
             .html(start_menu(filteredFactslen ))
             .click( function ( event ) {
-                
-                console.log(flag);
-                
-                
                 if(flag == 0){
                     event.preventDefault();
                 $('#inversesection > div.wikibase-showinverse').css({'border': '3px solid #0645ad'})
