@@ -21,7 +21,8 @@ importScript('User:Data-Complete-Gadget/WikidataComplete.js');
 
 ### Step 4: Now visit any [random item](https://www.wikidata.org/wiki/Special:Random) at Wikidata and start editing 🥳
 
-
+## :camera: Video Guide:
+Check out the [video guide](https://www.youtube.com/watch?v=Ju2ExZ_khxQ)
 ## 💻 Maintainers
 
 - [Dennis Diefenbach](https://github.com/D063520)
@@ -29,3 +30,7 @@ importScript('User:Data-Complete-Gadget/WikidataComplete.js');
 - [Aleksandr Perevalov](https://github.com/Perevalov)
 - [Kunpeng Guo](https://github.com/gabinguo)
 - [Dhairya Khanna](https://github.com/Dhairya3124)
+
+## :fireworks: Contribution Guide
+Check out the contribution [guide](https://github.com/Dhairya3124/Wikidata-Complete-Gadget/blob/main/Contribution.md)
+
