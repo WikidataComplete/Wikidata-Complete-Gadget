@@ -408,7 +408,7 @@ importScript('User:Gabinguo/celebration.js');
                     document.querySelector("#inversesection > div.wikibase-showinverse > div > div.wikibase-showinverse-child-1 > a").innerHTML = answer_after_reject;
                     }
                     if((filteredFactslen-1)>1){
-                        answer_after_reject = `There are ${filteredFactslen-1} to approve`;   
+                        answer_after_reject = `There are ${filteredFactslen-1} statements to approve`;   
                      document.querySelector("#inversesection > div.wikibase-showinverse > div > div.wikibase-showinverse-child-1 > a").innerHTML = answer_after_reject;
                     }
                     else{
