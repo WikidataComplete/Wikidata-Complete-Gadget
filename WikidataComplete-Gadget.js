@@ -355,6 +355,8 @@ importScript('User:Gabinguo/celebration.js');
                     let arg3 = e.target.getAttribute('url-id');
                     let arg4 = e.target.getAttribute('qualifier-id');
                     let arg5 = e.target.getAttribute('ref-id');
+                    let today = new Date();
+                    today.setUTCHours(0, 0, 0, 0);
                     var snak = JSON.stringify({ "entity-type": 'item', "numeric-id": arg3.substring(32) });
                     var snaksorder = ["P4656","P1683"];
                     var sourceSnaks = {
@@ -367,6 +369,24 @@ importScript('User:Gabinguo/celebration.js');
                                     "type": "string"
                                 },
                                 "datatype": "url"
+                            }
+                        ],
+                        "P813": [
+                            {
+                                "snaktype": "value",
+                                "property": "P813",
+                                "datavalue": {
+                                    "value": {
+                                        "time": "+" + today.toISOString().replace(/\.\d*Z$/, 'Z'),
+                                        "timezone": 0,
+                                        "before": 0,
+                                        "after": 0,
+                                        "precision": 11,
+                                        "calendarmodel": "http://www.wikidata.org/entity/Q1985727"
+                                    },
+                                    "type": "time"
+                                },
+                                "datatype": "time"
                             }
                         ],
                         "P1683": [
