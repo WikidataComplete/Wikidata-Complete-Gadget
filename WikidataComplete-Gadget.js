@@ -232,6 +232,12 @@ importScript('User:Gabinguo/celebration.js');
                                });       
                         });
                     }
+                    let nowdate = new Date();
+                    nowdate.setUTCHours(0,0,0,0);
+                    const monthNames = ["January", "February", "March", "April", "May", "June",
+  "July", "August", "September", "October", "November", "December"];
+                    
+
     /*
     The main function for loading the data to the gadget.
     */
@@ -323,6 +329,23 @@ importScript('User:Gabinguo/celebration.js');
 </div></div>\
 </div></div>\
 </div></div>\
+<div class="wikibase-referenceview wikibase-referenceview-b4744396545cd28b2367fad16c02c0b839379bc5">\
+<div class="wikibase-referenceview-heading"></div>\
+<div class="wikibase-referenceview-listview"><div class="wikibase-snaklistview">\
+<div class="wikibase-snaklistview-listview"><div class="wikibase-snakview wikibase-snakview-7e00f9de0f47d0de70ec6ee58edfc93608905b2d">\
+<div class="wikibase-snakview-property-container">\
+<div class="wikibase-snakview-property" dir="auto"><a title="Property:P813" href="/wiki/Property:P813">retrieved</a></div>\
+</div>\
+<div class="wikibase-snakview-value-container" dir="auto">\
+<div class="wikibase-snakview-typeselector"></div>\
+<div class="wikibase-snakview-body">\
+<div class="wikibase-snakview-value wikibase-snakview-variation-valuesnak">' + nowdate.getDate() + ' ' + monthNames[nowdate.getMonth()] + ' ' + nowdate.getUTCFullYear() + '</div>\
+<div class="wikibase-snakview-indicators"></div>\
+</div>\
+</div>\
+</div></div>\
+</div></div>\
+</div>\
 <div class="wikibase-referenceview wikibase-referenceview-d4bd87b862b12d99d26e86472d44f26858dee639">\
 <div class="wikibase-referenceview-heading"></div>\
 <div class="wikibase-referenceview-listview"><div class="wikibase-snaklistview">\
