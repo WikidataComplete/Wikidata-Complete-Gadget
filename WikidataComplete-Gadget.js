@@ -36,22 +36,6 @@ importScript('User:Gabinguo/celebration.js');
                 'no-result': 'no result',
                 'loading': 'loading...'
             },
-            fr: {
-                'title': 'Mettre à jour les relevés',
-                'more': 'plus',
-                'inverse': 'inverse',
-                'show-inverse': 'afficher les déclarations récupérées',
-                'no-result': 'pas de résultats',
-                'loading': 'chargement...'
-           },
-           'zh-hans': {
-                'title': '更新声明',
-                'more': '更多',
-                'inverse': '反向',
-                'show-inverse': '显示获取的语句',
-                'no-result': '无结果',
-                'loading': '加载中...'
-            },
             es:{
                 'title': 'Actualizar declaraciones',
                 'more': 'más',
@@ -59,8 +43,32 @@ importScript('User:Gabinguo/celebration.js');
                 'show-inverse': 'mostrar declaraciones recuperadas',
                 'no-result': 'sin resultados',
                 'loading': 'cargando...'
-
-            },           
+            },
+            fr: {
+                'title': 'Mettre à jour les relevés',
+                'more': 'plus',
+                'inverse': 'inverse',
+                'show-inverse': 'afficher les déclarations récupérées',
+                'no-result': 'pas de résultats',
+                'loading': 'chargement...'
+            },
+            sv: {
+                'title1': 'Du har så här många uttalanden att förbättra',
+                'title2': 'Visa nästa entitet som kan förbättras',
+                'more': 'mer',
+                'inverse': 'invertera',
+                'show-inverse': 'visa hämtade uttalanden',
+                'no-result': 'inga resultat',
+                'loading': 'laddar...'
+            },
+            'zh-hans': {
+                'title': '更新声明',
+                'more': '更多',
+                'inverse': '反向',
+                'show-inverse': '显示获取的语句',
+                'no-result': '无结果',
+                'loading': '加载中...'
+            },
         },
         chain = mw.language.getFallbackLanguageChain(),
         len = chain.length,
@@ -89,7 +97,11 @@ importScript('User:Gabinguo/celebration.js');
 
     var propertyList2 = []
         $(".wikibase-statementgroupview-property-label a").each(function (){
-            propertyList2.push($(this).prop("href").split("/wiki/Property:")[1].toString())
+            try {
+                propertyList2.push($(this).prop("href").split("/wiki/Property:")[1].toString());
+            } catch (e) {
+                mw.log.warn('Error getting property value in User:Data-Complete-Gadget/WikidataComplete.js');
+            }
         });
         
         // the list to display
@@ -166,13 +178,12 @@ importScript('User:Gabinguo/celebration.js');
         <div class="wikidatacomplete">\
         <div class="wikibase-statementgrouplistview" id="inversesection" > \
              <div class="wikibase-listview"></div> \
-             <div class="wikibase-showinverse" style="padding:10px;overflow:hidden;border: 3px solid #c8ccd1;margin: 20px 0;text-align: center;">\
-             <div class="wikibase-showinverse-parent" style="float:left;padding-left: 308px;">\
-             <div class="wikibase-showinverse-child-1" style="float: left;padding-left: 13px;">\</div>\
-           <div class="wikibase-showinverse-parent" style= "float: right;padding-right: 20px;">\
-           <div class="wikibase-showinverse-child-2" style="position: absolute;float: right;padding-left: 207px;">  \
+             <div class="wikibase-showinverse" style="padding:10px;overflow:hidden;border: 3px solid #c8ccd1;margin: 0 0 2em;text-align: center;">\
+             <div class="wikibase-showinverse-parent" style="width: 100%;">\
+             <div class="wikibase-showinverse-child-2" style="float: right;padding-right: 30px;">  \
              <a href="'+ newitem +'" title="Find a new item">'+newitemtoappend+'</a>\
              </div>\
+             <div class="wikibase-showinverse-child-1" style="margin: 0 auto;width: 500px;">\</div>\
            </div>\
              </div> \
         </div>\
@@ -248,7 +259,11 @@ importScript('User:Gabinguo/celebration.js');
         $(document).ready(function(){
             var propertyList = []
         $(".wikibase-statementgroupview-property-label a").each(function (){
-            propertyList.push($(this).prop("href").split("/wiki/Property:")[1].toString())
+            var href = $(this).prop("href");
+            var p = href && href.split("/wiki/Property:")[1];
+            if (p) {
+	            propertyList.push(p.toString())
+            }
         });
         
             // this gives you the list of existing property ids
@@ -269,51 +284,52 @@ importScript('User:Gabinguo/celebration.js');
             
             
             if(!newList.includes(String(result1[i].property))){
-                    var statementgroup = '\
-	                        <div id= "'+result1[i].id+ '" class="wikibase-statementgroupview listview-item" style = "border:3px solid #0645ad !important;margin:20px 0;"> \
-	                            <div class="wikibase-statementgroupview-property" style="border: revert;"> \
-	                                <div class="wikibase-statementgroupview-property-label" dir="auto"> \
-                                    <a href="https://www.wikidata.org/wiki/Property:' + result1[i].property + '">' + result1[i].question + '</a>\
-	                                </div> \
-	                            </div> \
-	                            <div class="wikibase-statementlistview" style="border:revert;"> \
-	                                <div class="wikibase-statementlistview-listview"> \
-	                                </div> \
-	                            </div> \
-                 <div class="wikibase-statementview wb-normal listview-item wikibase-toolbar-item"> \
-					<div class="wikibase-statementview-rankselector"><div class="wikibase-rankselector ui-state-disabled"> \
-                    <span class="ui-icon ui-icon-rankselector wikibase-rankselector-normal" title="Normal rank"></span> \
-					</div></div>  \
-                    <div class="wikibase-statementview-mainsnak-container"> \
-                        <div class="wikibase-statementview-mainsnak" dir="auto"> \
-                            <div class="wikibase-snakview"> \
-                                <div class="wikibase-snakview-property-container"> \
-                                    <div class="wikibase-snakview-property" dir="auto"> \
-                                    </div> \
-                                </div> \
-                                <div class="wikibase-snakview-value-container" dir="auto"> \
-                                    <div class="wikibase-snakview-value wikibase-snakview-variation-valuesnak"> \
-                                        <a href="' + result1[i].object[0].object + '" >' + result1[i].object[0].objectLabel + '</a>\
-                                    </div> \
-                                    </div>\
-                                </div> \
-                            </div> \
+                var statementgroup = '\
+                <div id= "'+result1[i].id+ '" class="wikibase-statementgroupview listview-item" style = "border:3px solid #0645ad !important;margin:0 0 2em; width: calc(100% - 0.4em);"> \
+                    <div class="wikibase-statementgroupview-property"> \
+                        <div class="wikibase-statementgroupview-property-label" dir="auto"> \
+                        <a href="https://www.wikidata.org/wiki/Property:' + result1[i].property + '">' + result1[i].question + '</a>\
                         </div> \
                     </div> \
-                    <span class="wikibase-toolbar-container wikibase-edittoolbar-container">\
-                    <span class="wikibase-toolbar-item wikibase-toolbar wikibase-toolbar-container"><span class="wikibase-toolbar-item wikibase-toolbar wikibase-toolbar-container"><span class="wikibase-toolbarbutton wikibase-toolbar-item wikibase-toolbar-button wikibase-toolbar-button-save"><a class = "f2w-button f2w-property f2w-approve" href="'+'#'+ result1[i].property +'" title="" text-id = "' + result1[i].text + '" data-id = "'+ result1[i].property +'" url-id = "' + result1[i].object[0].object + '" " qualifier-id = "' + result1[i].evidence + '" " ref-id = "' + result1[i].wikipediaLink + '"accept-id = "'+ result1[i].id +'"style="padding-right: 30px;" ><span class="wb-icon" style = "display:inline-block;vertical-align:middle;background-position:center"></span>publish</a></span></span></span>\
-                    <span class="wikibase-toolbar-item wikibase-toolbar wikibase-toolbar-container"><span class="wikibase-toolbar-item wikibase-toolbar wikibase-toolbar-container"><span class="wikibase-toolbarbutton wikibase-toolbar-item wikibase-toolbar-button wikibase-toolbar-button-cancel"><a class="f2w-button f2w-property f2w-reject" href = "#" title="" reject-id = "'+ result1[i].id +'"style="padding-right: 20px;"><span class="wb-icon" style="padding-top: 22px;"></span>reject</a></span></span></span>\
-                    </span> \
-                    <div class = wikibase-statementview-references-container>\
-                        <div class = wikibase-statementview-references-heading>\
-                            <a class="ui-toggler ui-toggler-toggle ui-state-default">\
-                            <span class="ui-toggler-icon ui-icon ui-icon-triangle-1-s ui-toggler-icon3dtrans"></span>\
-                            <span class="ui-toggler-label">1 reference</span>\
-                            </a>\
-                            <div class="wb-tr-app"><!----></div>\
-                            </div>\
-                            <div class="wikibase-statementview-references wikibase-initially-collapsed" style="display: block;"><div class="wikibase-listview2"><div class="wikibase-referenceview wikibase-referenceview-d5847b9b6032aa8b13dae3c2dfd9ed5d114d21b3">\
-<div class="wikibase-referenceview-heading"></div>\
+                    <div class="wikibase-statementlistview" style="border:revert;"> \
+                        <div class="wikibase-statementlistview-listview"> \
+                        </div> \
+                    </div> \
+     <div class="wikibase-statementview wb-normal listview-item wikibase-toolbar-item"> \
+        <div class="wikibase-statementview-rankselector"> \
+            <div class="wikibase-rankselector ui-state-disabled" style="padding-left: 212px;"> \
+                <span class="ui-icon ui-icon-rankselector wikibase-rankselector-normal" title="Normal rank"></span> \
+                </div> \
+        </div>  \
+        <div class="wikibase-statementview-mainsnak-container"> \
+            <div class="wikibase-statementview-mainsnak" dir="auto"> \
+                <div class="wikibase-snakview"> \
+                    <div class="wikibase-snakview-property-container"> \
+                        <div class="wikibase-snakview-property" dir="auto"> \
+                        </div> \
+                    </div> \
+                    <div class="wikibase-snakview-value-container" dir="auto"> \
+                        <div class="wikibase-snakview-value wikibase-snakview-variation-valuesnak" style = "padding-left: 210px"> \
+                            <a href="' + result1[i].object[0].object + '" >' + result1[i].object[0].objectLabel + '</a>\
+                        </div> \
+                        </div>\
+                    </div> \
+                </div> \
+            </div> \
+        </div> \
+        <span class="wikibase-toolbar-container wikibase-edittoolbar-container">\
+        <span class="wikibase-toolbar-item wikibase-toolbar wikibase-toolbar-container"><span class="wikibase-toolbar-item wikibase-toolbar wikibase-toolbar-container"><span class="wikibase-toolbarbutton wikibase-toolbar-item wikibase-toolbar-button wikibase-toolbar-button-save"><a class = "f2w-button f2w-property f2w-approve" href="'+'#'+ result1[i].property +'" title="" text-id = "' + result1[i].text + '" data-id = "'+ result1[i].property +'" url-id = "' + result1[i].object[0].object + '" " qualifier-id = "' + result1[i].evidence + '" " ref-id = "' + result1[i].wikipediaLink + '"accept-id = "'+ result1[i].id +'"style="padding-right: 30px;" ><span class="wb-icon" style = "display:inline-block;vertical-align:middle;background-position:center"></span>publish</a></span></span></span>\
+        <span class="wikibase-toolbar-item wikibase-toolbar wikibase-toolbar-container"><span class="wikibase-toolbar-item wikibase-toolbar wikibase-toolbar-container"><span class="wikibase-toolbarbutton wikibase-toolbar-item wikibase-toolbar-button wikibase-toolbar-button-cancel"><a class="f2w-button f2w-property f2w-reject" href = "#" title="" reject-id = "'+ result1[i].id +'"style="padding-right: 20px;"><span class="wb-icon" style="padding-top: 22px;"></span>reject</a></span></span></span>\
+        </span> \
+        <div class = wikibase-statementview-references-container style="margin-left: 200px;">\
+            <div class = wikibase-statementview-references-heading>\
+                <a class="ui-toggler ui-toggler-toggle ui-state-default">\
+                <span class="ui-toggler-icon ui-icon ui-icon-triangle-1-s ui-toggler-icon3dtrans"></span>\
+                <span class="ui-toggler-label">1 reference</span>\
+                </a>\
+                <div class="wb-tr-app"><!----></div>\
+                </div>\
+                <div class="wikibase-statementview-references wikibase-initially-collapsed" style="display: block;"><div class="wikibase-listview2"><div class="wikibase-referenceview wikibase-referenceview-d5847b9b6032aa8b13dae3c2dfd9ed5d114d21b3">\
 <div class="wikibase-referenceview-listview"><div class="wikibase-snaklistview">\
 <div class="wikibase-snaklistview-listview"><div class="wikibase-snakview wikibase-snakview-5a343e7e758a4282a01316d3e959b6e653b767fc">\
 <div class="wikibase-snakview-property-container">\
@@ -330,7 +346,6 @@ importScript('User:Gabinguo/celebration.js');
 </div></div>\
 </div></div>\
 <div class="wikibase-referenceview wikibase-referenceview-b4744396545cd28b2367fad16c02c0b839379bc5">\
-<div class="wikibase-referenceview-heading"></div>\
 <div class="wikibase-referenceview-listview"><div class="wikibase-snaklistview">\
 <div class="wikibase-snaklistview-listview"><div class="wikibase-snakview wikibase-snakview-7e00f9de0f47d0de70ec6ee58edfc93608905b2d">\
 <div class="wikibase-snakview-property-container">\
@@ -347,7 +362,6 @@ importScript('User:Gabinguo/celebration.js');
 </div></div>\
 </div>\
 <div class="wikibase-referenceview wikibase-referenceview-d4bd87b862b12d99d26e86472d44f26858dee639">\
-<div class="wikibase-referenceview-heading"></div>\
 <div class="wikibase-referenceview-listview"><div class="wikibase-snaklistview">\
 <div class="wikibase-snaklistview-listview"><div class="wikibase-snakview wikibase-snakview-f30cbd35620c4ea6d0633aaf0210a8916130469b">\
 <div class="wikibase-snakview-property-container">\
@@ -364,9 +378,9 @@ importScript('User:Gabinguo/celebration.js');
 </div></div>\
 </div>\
 </div>\
-                        </div>\
-                    </div>\
-                    </div>';
+            </div>\
+        </div>\
+        </div>';
                     //To append the statements to the HTML code.
                     $('#inversesection').find('.wikibase-listview').parent().append(statementgroup);    
                 $('.f2w-approve').unbind('click').on('click',function(e){
@@ -455,7 +469,7 @@ importScript('User:Gabinguo/celebration.js');
                      document.querySelector("#inversesection > div.wikibase-showinverse > div > div.wikibase-showinverse-child-1 > a").innerHTML = answer_after_reject;
                     }
                     else{
-                        document.querySelector("#inversesection > div.wikibase-showinverse > div > div.wikibase-showinverse-parent > div > a").innerHTML = '';
+                        document.querySelector("#inversesection > div.wikibase-showinverse > div.wikibase-showinverse-parent > div > a").innerHTML = '';
                     document.querySelector("#inversesection > div.wikibase-showinverse > div > div.wikibase-showinverse-child-1 > a").innerHTML = "Go to entity with statements to approve".link(newitem);
                     }
                     mw.notify ('You have successfully rejected the claim',
