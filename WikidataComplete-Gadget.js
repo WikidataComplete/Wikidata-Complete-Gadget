@@ -86,7 +86,7 @@ importScript('User:Gabinguo/celebration.js');
     var facts_length  = {};
     var newfacts;
     $.ajax({
-        url: 'https://qanswer-svc3.univ-st-etienne.fr/facts/get?qid=' + entityid + '&format=json',
+        url: 'https://datacompletewiki.toolforge.org/api/v1/facts/' + entityid + '/',
         async: false,
         dataType: 'json',
         success: function (data) {
@@ -113,7 +113,7 @@ importScript('User:Gabinguo/celebration.js');
     var highlightlink = [];
     var boldtext = [];
     $.ajax({
-        url: 'https://qanswer-svc3.univ-st-etienne.fr/facts/get?qid=' + entityid + '&format=json',
+        url: 'https://datacompletewiki.toolforge.org/api/v1/facts/' + entityid + '/',
         async: false,
         dataType: 'json',
         success: function (data) {
@@ -140,7 +140,7 @@ importScript('User:Gabinguo/celebration.js');
    //Generating a new random item to approve
 	var newitem = {};
     $.ajax({
-        url: "https://qanswer-svc3.univ-st-etienne.fr/fact/get?id=EMPTY&category=EMPTY&property=EMPTY",
+        url: "https://datacompletewiki.toolforge.org/api/v1/facts/random/",
         async: false,
         dataType: 'json',
         success: function(data) {
@@ -229,14 +229,13 @@ importScript('User:Gabinguo/celebration.js');
                                        if(data2.success == 1)
                                         { console.log("Claim Added Successfully");
                                         var acceptance = {
-                                            "url": "https://qanswer-svc3.univ-st-etienne.fr/fact/correct?userCookie=c51f3c6f-ef1c-41ff-b1ca-7a994666b93e&factId="+acc+"&correction=1",
+                                            "url": "https://datacompletewiki.toolforge.org/api/v1/facts/accept/",
                                             "method": "POST",
+                                            "data": {"fact_id": acc},
                                             "timeout": 0,
                                           };
-                                          
                                           $.ajax(acceptance).done(function (response) {
                                             console.log(response);
-                                            location.reload();
                                           });
                                          location.reload();
                                }
@@ -277,7 +276,7 @@ importScript('User:Gabinguo/celebration.js');
     
     
    function loaditems() {
-        var fetchurl = 'https://qanswer-svc3.univ-st-etienne.fr/facts/get?qid=' + entityid + '&format=json';
+        var fetchurl = 'https://datacompletewiki.toolforge.org/api/v1/facts/' + entityid + '/';
         $.getJSON(fetchurl,
         function( result1 ){
         for (var i=0; i< result1.length; i++){ 
@@ -301,7 +300,7 @@ importScript('User:Gabinguo/celebration.js');
                 <span class="ui-icon ui-icon-rankselector wikibase-rankselector-normal" title="Normal rank"></span> \
                 </div> \
         </div>  \
-        <div class="wikibase-statementview-mainsnak-container"> \
+        <div class="wikibase-statementview-mainsnak-container" style="margin-left: 40px;"> \
             <div class="wikibase-statementview-mainsnak" dir="auto"> \
                 <div class="wikibase-snakview"> \
                     <div class="wikibase-snakview-property-container"> \
@@ -321,7 +320,7 @@ importScript('User:Gabinguo/celebration.js');
         <span class="wikibase-toolbar-item wikibase-toolbar wikibase-toolbar-container"><span class="wikibase-toolbar-item wikibase-toolbar wikibase-toolbar-container"><span class="wikibase-toolbarbutton wikibase-toolbar-item wikibase-toolbar-button wikibase-toolbar-button-save"><a class = "f2w-button f2w-property f2w-approve" href="'+'#'+ result1[i].property +'" title="" text-id = "' + result1[i].text + '" data-id = "'+ result1[i].property +'" url-id = "' + result1[i].object[0].object + '" " qualifier-id = "' + result1[i].evidence + '" " ref-id = "' + result1[i].wikipediaLink + '"accept-id = "'+ result1[i].id +'"style="padding-right: 30px;" ><span class="wb-icon" style = "display:inline-block;vertical-align:middle;background-position:center"></span>publish</a></span></span></span>\
         <span class="wikibase-toolbar-item wikibase-toolbar wikibase-toolbar-container"><span class="wikibase-toolbar-item wikibase-toolbar wikibase-toolbar-container"><span class="wikibase-toolbarbutton wikibase-toolbar-item wikibase-toolbar-button wikibase-toolbar-button-cancel"><a class="f2w-button f2w-property f2w-reject" href = "#" title="" reject-id = "'+ result1[i].id +'"style="padding-right: 20px;"><span class="wb-icon" style="padding-top: 22px;"></span>reject</a></span></span></span>\
         </span> \
-        <div class = wikibase-statementview-references-container style="margin-left: 200px;">\
+        <div class = wikibase-statementview-references-container style="margin-left: 240px;">\
             <div class = wikibase-statementview-references-heading>\
                 <a class="ui-toggler ui-toggler-toggle ui-state-default">\
                 <span class="ui-toggler-icon ui-icon ui-icon-triangle-1-s ui-toggler-icon3dtrans"></span>\
@@ -483,18 +482,17 @@ importScript('User:Gabinguo/celebration.js');
 
                 let rej = e.target.getAttribute('reject-id');
                 var rej_string = String(rej);
-                var new_rej_string = '#\\3' + rej_string.substring(0,1) + ' ' + rej_string.substring(1);
-                document.querySelector(new_rej_string).remove();
+                document.getElementById(rej_string).remove();
                 //POST request for removing the rejected claim.
                 var rejections = {
-                    "url": "https://qanswer-svc3.univ-st-etienne.fr/fact/correct?userCookie=c51f3c6f-ef1c-41ff-b1ca-7a994666b93e&factId="+rej+"&correction=2",
+                    "url": "https://datacompletewiki.toolforge.org/api/v1/facts/reject/",
                     "method": "POST",
+                    "data": {"fact_id": rej},
                     "timeout": 0,
                   };
                   
                   $.ajax(rejections).done(function (response) {
                     console.log(response);
-                    //location.reload();
                   });
                 });
                 
