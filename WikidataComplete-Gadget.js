@@ -242,8 +242,6 @@ importScript('User:Gabinguo/celebration.js');
                                });       
                         });
                     }
-                    let nowdate = new Date();
-                    nowdate.setUTCHours(0,0,0,0);
                     const monthNames = ["January", "February", "March", "April", "May", "June",
   "July", "August", "September", "October", "November", "December"];
                     
@@ -281,7 +279,7 @@ importScript('User:Gabinguo/celebration.js');
         function( result1 ){
         for (var i=0; i< result1.length; i++){ 
             
-            
+            var retrieved_date = new Date(result1[i].retrieved);
             if(!newList.includes(String(result1[i].property))){
                 var statementgroup = '\
                 <div id= "'+result1[i].id+ '" class="wikibase-statementgroupview listview-item" style = "border:3px solid #0645ad !important;margin:0 0 2em; width: calc(100% - 0.4em);"> \
@@ -296,7 +294,7 @@ importScript('User:Gabinguo/celebration.js');
                     </div> \
      <div class="wikibase-statementview wb-normal listview-item wikibase-toolbar-item"> \
         <div class="wikibase-statementview-rankselector"> \
-            <div class="wikibase-rankselector ui-state-disabled" style="padding-left: 212px;"> \
+            <div class="wikibase-rankselector ui-state-disabled" style="padding-left: 262px;"> \
                 <span class="ui-icon ui-icon-rankselector wikibase-rankselector-normal" title="Normal rank"></span> \
                 </div> \
         </div>  \
@@ -308,7 +306,7 @@ importScript('User:Gabinguo/celebration.js');
                         </div> \
                     </div> \
                     <div class="wikibase-snakview-value-container" dir="auto"> \
-                        <div class="wikibase-snakview-value wikibase-snakview-variation-valuesnak" style = "padding-left: 210px"> \
+                        <div class="wikibase-snakview-value wikibase-snakview-variation-valuesnak" style = "padding-left: 220px"> \
                             <a href="' + result1[i].object[0].object + '" >' + result1[i].object[0].objectLabel + '</a>\
                         </div> \
                         </div>\
@@ -336,7 +334,7 @@ importScript('User:Gabinguo/celebration.js');
 </div>\
 <div class="wikibase-snakview-value-container" dir="auto">\
 <div class="wikibase-snakview-typeselector"></div>\
-<div class="wikibase-snakview-body">\
+<div class="wikibase-snakview-body" style="width: fit-content;">\
 <div class="wikibase-snakview-value wikibase-snakview-variation-valuesnak"><a title="' + entityid + '" href="' + highlightlink[i] + '"target = "_blank" rel="noreferrer">' + result1[i].wikipediaLink + '</a></div>\
 <div class="wikibase-snakview-indicators"></div>\
 </div>\
@@ -352,8 +350,8 @@ importScript('User:Gabinguo/celebration.js');
 </div>\
 <div class="wikibase-snakview-value-container" dir="auto">\
 <div class="wikibase-snakview-typeselector"></div>\
-<div class="wikibase-snakview-body">\
-<div class="wikibase-snakview-value wikibase-snakview-variation-valuesnak">' + nowdate.getDate() + ' ' + monthNames[nowdate.getMonth()] + ' ' + nowdate.getUTCFullYear() + '</div>\
+<div class="wikibase-snakview-body" style="width: fit-content;">\
+<div class="wikibase-snakview-value wikibase-snakview-variation-valuesnak">' + retrieved_date.getDate() + ' ' + monthNames[retrieved_date.getMonth()] + ' ' + retrieved_date.getFullYear() + '</div>\
 <div class="wikibase-snakview-indicators"></div>\
 </div>\
 </div>\
@@ -368,7 +366,7 @@ importScript('User:Gabinguo/celebration.js');
 </div>\
 <div class="wikibase-snakview-value-container" dir="auto">\
 <div class="wikibase-snakview-typeselector"></div>\
-<div class="wikibase-snakview-body">\
+<div class="wikibase-snakview-body" style="width: fit-content;">\
 <div class="wikibase-snakview-value wikibase-snakview-variation-valuesnak">'+boldtext[i]+'</div>\
 <div class="wikibase-snakview-indicators"></div>\
 </div>\
