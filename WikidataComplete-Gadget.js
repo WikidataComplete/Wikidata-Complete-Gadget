@@ -184,31 +184,29 @@ importScript("User:Gabinguo/celebration.js");
     return final_message;
   }
 
+  // prettier-ignore
   var html =
     '\
         <div class="wb-section-heading section-heading wikibase-statements wikibase-statements">\
-        <div class="wikidatacomplete">\
-        <div class="wikibase-statementgrouplistview" id="inversesection" > \
-             <div class="wikibase-listview"></div> \
-             <div class="wikibase-showinverse" style="padding:10px;overflow:hidden;border: 3px solid #c8ccd1;margin: 0 0 2em;text-align: center;">\
-             <div class="wikibase-showinverse-parent" style="width: 100%;">\
-             <div class="wikibase-showinverse-child-2" style="float: right;padding-right: 30px;">  \
-             <a href="' +
-    newitem +
-    '" title="Find a new item">' +
-    newitemtoappend +
-    '</a>\
-             </div>\
-             <div class="wikibase-showinverse-child-1" style="margin: 0 auto;width: 500px;"></div>\
-           </div>\
-             </div> \
-        </div>\
-        </div>\
+          <div class="wikidatacomplete">\
+            <div class="wikibase-statementgrouplistview" id="inversesection" > \
+              <div class="wikibase-listview"> \
+              </div> \
+              <div class="wikibase-showinverse" style="padding:10px;overflow:hidden;border: 3px solid #c8ccd1;margin: 0 0 2em;text-align: center;">\
+                <div class="wikibase-showinverse-parent" style="width: 100%;">\
+                  <div class="wikibase-showinverse-child-2" style="float: right;padding-right: 30px;">  \
+                    <a href="' + newitem + '" title="Find a new item">' + newitemtoappend + '</a>\
+                  </div>\
+                  <div class="wikibase-showinverse-child-1" style="margin: 0 auto;width: 500px;"> \
+                  </div>\
+                </div>\
+              </div> \
+            </div>\
+          </div>\
         </div>';
-  /*
-        The following function is used to create claim using Wikidata APIs. 
-        Want know about them? Check out the documentation: https://www.wikidata.org/w/api.php 
-        */
+
+  /* The following function is used to create claim using Wikidata APIs.
+   Want know about them? Check out the documentation: https://www.wikidata.org/w/api.php */
   $(document).ready(function () {
     $("#inversesection:last").remove();
   });
