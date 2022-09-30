@@ -34,7 +34,7 @@ importScript("User:Gabinguo/celebration.js");
         },
         en: {
           title1: "You have these number of statements to approve",
-          title2: "Show next entity which can be  approved",
+          title2: "Show next entity which can be approved",
           more: "more",
           inverse: "inverse",
           "show-inverse": "show fetched statements",
@@ -163,7 +163,7 @@ importScript("User:Gabinguo/celebration.js");
   function start_menu_null(filteredFactslen) {
     var newitemtoappend;
     if (filteredFactslen == 0) newitemtoappend = "";
-    else newitemtoappend = "Next Approvable Item";
+    else newitemtoappend = "Next Entity";
     return newitemtoappend;
   }
   var newitemtoappend = start_menu_null(filteredFactslen);
@@ -173,17 +173,16 @@ importScript("User:Gabinguo/celebration.js");
     var final_message = "";
     if (filteredFactslen == 1) {
       final_message =
-        "There is " + String(filteredFactslen) + " statement to approve.";
+        "There is " + String(filteredFactslen) + " statement to approve";
     } else if (filteredFactslen > 1) {
       final_message =
-        "There are " + String(filteredFactslen) + " statements to approve.";
+        "There are " + String(filteredFactslen) + " statements to approve";
     } else if (filteredFactslen == 0) {
       flag = 1;
       final_message = "Go to entity with statements to approve".link(newitem);
     }
     return final_message;
   }
-
   // prettier-ignore
   var html =
     '\
@@ -194,10 +193,18 @@ importScript("User:Gabinguo/celebration.js");
               </div> \
               <div class="wikibase-showinverse" style="padding:10px;overflow:hidden;border: 3px solid #c8ccd1;margin: 0 0 2em;text-align: center;">\
                 <div class="wikibase-showinverse-parent" style="width: 100%;">\
-                  <div class="wikibase-showinverse-child-2" style="float: right;padding-right: 30px;">  \
+                  <div class="wikibase-showinverse-child-1" style="float: left ;width: 60%; text-align: right"> \
+                  </div>\
+                  <div class="wikibase-showinverse-child-2" style="float: left;width: 20%; text-align: right">  \
                     <a href="' + newitem + '" title="Find a new item">' + newitemtoappend + '</a>\
                   </div>\
-                  <div class="wikibase-showinverse-child-1" style="margin: 0 auto;width: 500px;"> \
+                  <div class="dropdown child3" style="float: left;width: 20%">\
+                    <a href="#" class="dropbtn" style="font-family: inherit;" id="toggleDropdown">More</a>\
+                    <div class="dropdown-content" id="myDropdown" style="display: none;position: absolute;background-color: #f9f9f9;min-width: 160px;box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);z-index: 1;margin-top:13px;margin-left:40px">\
+                      <a href="https://datacompletewiki.toolforge.org/donate/" target="_blank" style="float: none;padding: 12px 16px;display: block;text-align: left">Donate Data</a>\
+                      <a href="https://datacompletewiki.toolforge.org/dashboard/" target="_blank" style="float: none;padding: 12px 16px;display: block;text-align: left">Check Dashboard</a>\
+                      <a href="https://github.com/WikidataComplete/Wikidata-Complete-Gadget/issues/new/choose" target="_blank" style="float: none;padding: 12px 16px;display: block;text-align: left">Report Issue</a>\
+                    </div>\
                   </div>\
                 </div>\
               </div> \
@@ -210,6 +217,7 @@ importScript("User:Gabinguo/celebration.js");
   $(document).ready(function () {
     $("#inversesection:last").remove();
   });
+
   function createclaim(qid, pid, snak, sourceSnaks, snaksorder, username, acc) {
     var api = new mw.Api();
     api.get({ action: "query", meta: "tokens" }).then(function (aw) {
@@ -273,7 +281,6 @@ importScript("User:Gabinguo/celebration.js");
     The main function for loading the data to the gadget.
     */
   //https://en.wikipedia.org/wiki/Batgirl_and_the_Birds_of_Prey#:~:text=Batgirl%20and%20the%20Birds%20of%20Prey%20was%20a%20monthly%20ongoing%20American-,comic%20book
-  var check = new Map();
   var newList = [];
   function Properties() {
     $(document).ready(function () {
@@ -585,6 +592,15 @@ importScript("User:Gabinguo/celebration.js");
 
   function init() {
     $("div.wikibase-statementgrouplistview").first().prepend(html);
+    var dropdownHidden = true;
+    $("#toggleDropdown").on("click", function () {
+      if (dropdownHidden) {
+        document.getElementById("myDropdown").style.display = "block";
+      } else {
+        document.getElementById("myDropdown").style.display = "none";
+      }
+      dropdownHidden = !dropdownHidden;
+    });
     $("#inversesection")
       .find(".wikibase-showinverse-child-1")
       .append(
