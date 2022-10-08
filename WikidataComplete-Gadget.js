@@ -459,6 +459,7 @@ importScript("User:Gabinguo/celebration.js");
               //e.preventDefault();
               e.stopPropagation();
               //celebrate();
+              console.log(e.target);
               let arg1 = e.target.getAttribute("data-id");
               let arg2 = e.target.getAttribute("text-id");
               let arg3 = e.target.getAttribute("url-id");
@@ -468,7 +469,7 @@ importScript("User:Gabinguo/celebration.js");
               today.setUTCHours(0, 0, 0, 0);
               var snak = JSON.stringify({
                 "entity-type": "item",
-                "numeric-id": arg3.substring(32),
+                "numeric-id": arg3.substring(1), // numeric part of Value's QId (eg: 123 for Q123)
               });
               var snaksorder = ["P4656", "P1683"];
               var sourceSnaks = {
